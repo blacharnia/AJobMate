@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, AJobMateActivity!</string>
+    <string name="app_name">AJobMate</string>
+	<string name="no_offers">No job offers entered</string>
+	<string name="no_tasks">No tasks entered</string>
+	<string name="menu_insert">Add offer</string>
+	<string name="confirm">Confirm</string>
+	<string name="create">Create</string>
+	<string name="cancel">Cancel</string>
+	<string name="archive">Archive</string>
+	<string name="delete">Delete</string>
+	<string name="menu_archive">Archive offer</string>
+	<string name="menu_call">Call</string>
+	<string name="show_hint">Show instructions</string>
+	<string name="send_email">Send email</string>
+	<string name="exit">Exit</string>
+	<string name="details">Details >> </string>
+	<string name="location">Location</string>
+	<string name="update">Update</string>
+	<string name="send_update">Send update</string>
+	<string name="instructions">"Instructions:\n \nPress MENU for adding new items \nClick an item to view/edit details \nLong press an item to show item - specific options."</string>
+	<string name="archive_all">Archive all</string>
+	<string name="delete_all">Delete all</string>
+	<string name="unarchive_all">Unarchive all</string>
+	<string name="unarchive">Unarchive</string>
+	<string name="confirm_archive_all_offers">Pressing archive will archive all offers</string>
+	<string name="confirm_unarchive_all_offers">Pressing archive will unarchive all offers</string>
+	<string name="confirm_archive_all_tasks">Pressing archive will archive all tasks</string>
+	<string name="confirm_delete_all_offers">Pressing delete will delete all offers</string>
+    <string name="confirm_delete_all_tasks">Pressing delete will delete all tasks</string>
+    
+	<string name="enter_offer_position">Enter offer position</string>
+	<string name="enter_task_description">Enter task description</string>
+	<string name="ok">OK</string>
+	<string name="enter_at_least_position_of_the_offer">Enter at least position of the offer!</string>
+	<string name="enter_at_least_description_of_the_task">Enter at least description of the task!</string>
+	<string name="archive_task">Archive task</string>
+	<string name="loading">Loading...</string>
+	<string name="archive_all_offers_confirmation">Archive all offers?</string>
+	<string name="unarchive_all_offers_confirmation">Unarchive all offers?</string>
+	<string name="archive_all_tasks_confirmation">Archive all tasks?</string>
+	<string name="delete_all_offers_confirmation">Delete all offers?</string>
+    <string name="delete_all_tasks_confirmation">Delete all tasks?</string>
+	<string name="none">none</string>
+	<string name="starttime">start time: </string>
+	<string name="endtime">end time: </string>
+
+</resources>

@@ -1,0 +1,1 @@
+sqlite3 /data/data/rafpio.AJobMate/databases/AJobMateDb

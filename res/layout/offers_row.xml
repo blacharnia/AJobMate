@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/my_offer_row" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<TextView android:id="@+id/position"
+		android:layout_alignParentTop="true" android:text="a"
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_alignParentLeft="true" android:textStyle="bold"
+		android:layout_width="wrap_content" android:layout_height="wrap_content" />
+
+	<TextView android:id="@+id/employer" android:layout_below="@id/position"
+		android:text="b" xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_alignParentLeft="true" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+
+	<TextView android:id="@+id/phoneNr" android:layout_below="@id/employer"
+		android:text="c" xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_alignParentLeft="true" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+
+	<TextView android:id="@+id/email" android:layout_below="@id/phoneNr"
+		android:text="d" xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_alignParentLeft="true" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	<ScrollView android:id="@+id/offer_scrollview"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_alignParentTop="true" android:layout_above="@id/option_panel">
+		<LinearLayout android:id="@+id/offer_layout"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:orientation="vertical">
+			<TextView android:id="@+id/title" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+			<TextView android:id="@+id/description"
+				android:layout_below="@id/title" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+			<TextView android:id="@+id/date" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+			<TextView android:id="@+id/link" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+		</LinearLayout>
+	</ScrollView>
+
+	<LinearLayout android:id="@+id/option_panel"
+		android:layout_alignParentBottom="true" android:orientation="horizontal"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+		<Button android:layout_height="wrap_content" android:text="Import"
+			android:layout_width="wrap_content" android:layout_alignParentBottom="true"
+			android:id="@+id/button_import" />
+	</LinearLayout>
+
+</RelativeLayout>

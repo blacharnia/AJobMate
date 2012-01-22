@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	<ScrollView android:layout_width="fill_parent"
+		android:layout_alignParentTop="true" android:layout_above="@+id/option_panel"
+		android:layout_height="fill_parent">
+		<LinearLayout android:id="@+id/form_fields"
+			android:layout_width="fill_parent" android:orientation="vertical"
+			android:layout_height="wrap_content">
+
+			<TextView android:id="@+id/description"
+				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+			<TextView android:text="" android:id="@+id/startTimeText"
+				android:layout_width="wrap_content" android:layout_height="wrap_content" />
+			<TextView android:text="" android:id="@+id/endTimeText"
+				android:layout_width="wrap_content" android:layout_height="wrap_content" />
+			<TextView android:text="" android:id="@+id/notificationTimeText"
+				android:layout_width="wrap_content" android:layout_height="wrap_content" />
+			<TextView android:id="@+id/offer" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+
+		</LinearLayout>
+	</ScrollView>
+	<LinearLayout android:id="@+id/option_panel"
+		android:layout_alignParentBottom="true" android:orientation="horizontal"
+		android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<Button android:id="@+id/edit" android:text="Edit"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+		<Button android:id="@+id/archive" android:text="Archive" android:visibility="gone"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+
+	</LinearLayout>
+</RelativeLayout>

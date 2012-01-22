@@ -1,0 +1,1 @@
+adb uninstall rafpio.ajobmate

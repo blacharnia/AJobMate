@@ -1,0 +1,1 @@
+create table offers (_id integer primary key autoincrement, position text not null, employer text not null, city text, description text, phone_nr text, email text);
