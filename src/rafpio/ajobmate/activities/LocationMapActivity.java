@@ -1,42 +1,72 @@
 package rafpio.ajobmate.activities;
 
+import java.util.List;
+
 import rafpio.ajobmate.R;
+import rafpio.ajobmate.core.LocationItemizedOverlay;
 import android.os.Bundle;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 public class LocationMapActivity extends MapActivity {
 
-    MapView mapView;
-    MapController mc;
-    GeoPoint p;
+	MapView mapView;
+	MapController mc;
+	GeoPoint p;
+	double latitude;
+	double longitude;
+	String title;
+	String message;
 
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.location_mapview);
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        mapView = (MapView) findViewById(R.id.mapView);
+		init();
 
-        mc = mapView.getController();
-        String coordinates[] = { "1.352566007", "103.78921587" };
-        double lat = Double.parseDouble(coordinates[0]);
-        double lng = Double.parseDouble(coordinates[1]);
+		setContentView(R.layout.location_mapview);
 
-        p = new GeoPoint((int) (lat * 1E6), (int) (lng * 1E6));
+		mapView = (MapView) findViewById(R.id.mapView);
+		mapView.setBuiltInZoomControls(true);
 
-        mc.animateTo(p);
-        mapView.invalidate();
-    }
+		mc = mapView.getController();
+		p = new GeoPoint((int) (latitude * 1E6), (int) (longitude * 1E6));
+		mc.animateTo(p);
+		
 
-    @Override
-    protected boolean isRouteDisplayed() {
-        // TODO Auto-generated method stub
-        return false;
-    }
+		List<Overlay> mapOverlays = mapView.getOverlays();
+		LocationItemizedOverlay itemizedoverlay = new LocationItemizedOverlay(
+				getResources().getDrawable(R.drawable.androidmarker), this);
 
+		OverlayItem overlayitem = new OverlayItem(p, title, message);
+		itemizedoverlay.addOverlay(overlayitem);
+		mapOverlays.add(itemizedoverlay);
+	}
+
+	@Override
+	protected boolean isRouteDisplayed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private void init() {
+		Bundle extras = getIntent().getExtras();
+		if (null != extras) {
+			latitude = extras.getDouble(getString(R.string.latitude));
+			longitude = extras.getDouble(getString(R.string.longitude));
+			if (0L == latitude || 0 == longitude) {
+				finish();				
+			}
+			title = extras.getString("title");
+			message = extras.getString("message");
+		} else {
+			finish();
+		}
+	}
 }

@@ -3,18 +3,26 @@ package rafpio.ajobmate.activities;
 import rafpio.ajobmate.R;
 import rafpio.ajobmate.core.Common;
 import rafpio.ajobmate.core.DialogManager;
+import rafpio.ajobmate.core.ILastLocationFinder;
 import rafpio.ajobmate.db.DBOfferHandler;
 import rafpio.ajobmate.db.JOffersDbAdapter;
 import rafpio.ajobmate.model.Offer;
 import android.app.Activity;
 import android.app.Dialog;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+
+//FIXME: disable adding offer when one with the same employer and position exists
 public class MyOfferAddEditActivity extends Activity {
+    private Button getLocationBtn;
     private EditText mPositionText;
     private EditText mEmployerText;
     private EditText mEmailText;
@@ -25,10 +33,14 @@ public class MyOfferAddEditActivity extends Activity {
     private EditText mDescriptionText;
     private long mRowId;
     private Offer offer;
+    private ILastLocationFinder lastLocationFinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        lastLocationFinder = Common.getLastLocationFinder(this);
+        lastLocationFinder
+                .setChangedLocationListener(oneShotLastLocationUpdateListener);
 
         setContentView(R.layout.offer_edit);
 
@@ -43,15 +55,17 @@ public class MyOfferAddEditActivity extends Activity {
         mEmailText = (EditText) findViewById(R.id.email);
         mPhoneNrText = (EditText) findViewById(R.id.phone_nr);
 
+        getLocationBtn = (Button) findViewById(R.id.gps_location);
+
+        getLocationBtn.setOnClickListener(mGetLocationClickListener);
+
         init();
 
         // button event listeners
         confirmButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                if (mPositionText.getText().toString().trim().equals("")) {
-                    showDialog(Common.ADDING_EMPTY_OFFER_DIALOG);
-                } else {
+                if (isEnoughDataProvided()) {
                     setupOfferObject();
                     if (mRowId == 0) {
                         createOffer();
@@ -60,6 +74,8 @@ public class MyOfferAddEditActivity extends Activity {
                     }
                     setResult(RESULT_OK);
                     finish();
+                } else {
+                    showDialog(Common.ADDING_EMPTY_OFFER_DIALOG);                    
                 }
             }
         });
@@ -71,6 +87,12 @@ public class MyOfferAddEditActivity extends Activity {
             }
         });
 
+    }
+
+    private boolean isEnoughDataProvided() {
+        return !TextUtils.isEmpty(mPositionText.getText().toString().trim())
+                && !TextUtils
+                        .isEmpty(mEmployerText.getText().toString().trim());
     }
 
     @Override
@@ -129,17 +151,11 @@ public class MyOfferAddEditActivity extends Activity {
     }
 
     private void createOffer() {
-        JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-        dbHelper.open();
-        dbHelper.createOffer(offer);
-        dbHelper.close();
+        JOffersDbAdapter.getInstance().createOffer(offer);
     }
 
     protected void updateOffer() {
-        JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-        dbHelper.open();
-        dbHelper.updateOffer(offer);
-        dbHelper.close();
+        JOffersDbAdapter.getInstance().updateOffer(offer);
     }
 
     private void populateFields() {
@@ -165,10 +181,54 @@ public class MyOfferAddEditActivity extends Activity {
         }
     }
 
+    private OnClickListener mGetLocationClickListener = new OnClickListener() {
+
+        public void onClick(View v) {
+            Location location = lastLocationFinder.getLastBestLocation(0, 0);
+            if (location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+
+                if (latitude != 0) {
+                    mLatitudeText.setText(String.valueOf(latitude));
+                }
+                if (longitude != 0) {
+                    mLongitudeText.setText(String.valueOf(longitude));
+                }
+            }
+        }
+    };
+
     // TODO: implement save instance state
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         outState.putLong(DBOfferHandler.KEY_ROWID, mRowId);
+        super.onSaveInstanceState(outState);
+
     }
+
+    protected LocationListener oneShotLastLocationUpdateListener = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            if (location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+
+                if (latitude != 0) {
+                    mLatitudeText.setText(String.valueOf(latitude));
+                }
+                if (longitude != 0) {
+                    mLongitudeText.setText(String.valueOf(longitude));
+                }
+            }
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+    };
 }

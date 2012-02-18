@@ -83,8 +83,9 @@ public class TaskAddEditActivity extends Activity {
     @Override
 	protected void onStart() {
     	populateOffers();
-
-        init();
+    	if(task == null){
+    		init();
+    	}
 		super.onStart();
 	}
 
@@ -131,9 +132,9 @@ public class TaskAddEditActivity extends Activity {
             populateFields();
         } else {
             task = new Task();
-            startTimeButton.setText("No start time provided");
-            endTimeButton.setText("No end time provided");
-            notificationTimeButton.setText("No notification time provided");
+            startTimeButton.setText("Press to set the start time");
+            endTimeButton.setText("Press to set the end time");
+            notificationTimeButton.setText("Press to set the notification time");
         }
         if (mOfferId > 0) {
             task.setOfferId(mOfferId);
@@ -180,16 +181,25 @@ public class TaskAddEditActivity extends Activity {
         if (resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if (extras != null) {
-                long time = extras.getLong("time");
+                long time = extras.getLong(getString(R.string.time));
                 if (requestCode == 0) {
                     task.setStartTime(time);
-                    updateTask();
+                    startTimeButton.setText(Common.getTimeAsString(time));
+                    if(mRowId > 0){
+                    	updateTask();
+                    }
                 } else if (requestCode == 1) {
                     task.setEndTime(time);
-                    updateTask();
+                    endTimeButton.setText(Common.getTimeAsString(time));
+                    if(mRowId > 0){
+                    	updateTask();
+                    }
                 } else if (requestCode == 2) {
                     task.setNotificationTime(time);
-                    updateTask();
+                    notificationTimeButton.setText(Common.getTimeAsString(time));
+                    if(mRowId > 0){
+                    	updateTask();
+                    }
                     setAlarm(time);
                 }
             }

@@ -2,6 +2,7 @@ package rafpio.ajobmate.activities;
 
 import rafpio.ajobmate.R;
 import rafpio.ajobmate.core.DataContainer;
+import rafpio.ajobmate.db.JOffersDbAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,10 +22,22 @@ public class AJobMateMainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        JOffersDbAdapter.getInstance().init(getApplicationContext());
+        JOffersDbAdapter.getInstance().open();
+        
         setContentView(R.layout.main);
         mOptionsList = (ListView) findViewById(R.id.options_list);
         mOptionsList.setAdapter(mListAdapter);
         mOptionsList.setOnItemClickListener(mItemClickListener);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        if(isFinishing()){
+            JOffersDbAdapter.getInstance().close();
+        }
+        super.onDestroy();
     }
 
     private OnItemClickListener mItemClickListener = new OnItemClickListener() {

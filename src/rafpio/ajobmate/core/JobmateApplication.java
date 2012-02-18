@@ -17,10 +17,11 @@ public class JobmateApplication extends Application {
     @Override
     public void onCreate() {
         appInstance = this;
-        JOffersDbAdapter.getInstance().init(getApplicationContext());
+        
+        
         super.onCreate();
     }
-
+ 
     public void setPendingIntent(PendingIntent pendingIntent) {
         this.pendingIntent = pendingIntent;
     }

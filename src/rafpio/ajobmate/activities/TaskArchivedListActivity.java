@@ -40,14 +40,13 @@ public class TaskArchivedListActivity extends Activity implements Observer {
 	private Spinner offerSpinner;
 	private List<Object> offers;
 	private long mOfferId;
-	private Button addButton;
-	private Button archiveAllButton;
+	private Button unarchiveAllButton;
 	private Button deleteAllButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.my_tasks);
+		setContentView(R.layout.my_tasks_archived);
 
 		offerSpinner = (Spinner) findViewById(R.id.offers);
 
@@ -56,11 +55,8 @@ public class TaskArchivedListActivity extends Activity implements Observer {
 		mTasksList.setOnItemClickListener(mItemListener);
 		registerForContextMenu(mTasksList);
 
-		addButton = (Button) findViewById(R.id.add);
-		addButton.setOnClickListener(addClickListener);
-
-		archiveAllButton = (Button) findViewById(R.id.archiveAll);
-		archiveAllButton.setOnClickListener(archiveAllClickListener);
+		unarchiveAllButton = (Button) findViewById(R.id.unarchiveAll);
+		unarchiveAllButton.setOnClickListener(unarchiveAllClickListener);
 
 		deleteAllButton = (Button) findViewById(R.id.deleteAll);
 		deleteAllButton.setOnClickListener(deleteAllClickListener);
@@ -113,26 +109,30 @@ public class TaskArchivedListActivity extends Activity implements Observer {
 			} else {
 				mListAdapter.changeCursor(cursor);
 			}
-			findViewById(R.id.archiveAll).setEnabled(cursor.getCount() > 0);
-
+			int cnt = cursor.getCount();
+			unarchiveAllButton.setEnabled(cnt > 0);
+			deleteAllButton.setEnabled(cnt > 0);
 		}
 		dbHelper.close();
-
 	}
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-		menu.add(Menu.NONE, 0, 0, R.string.archive_task);
+		menu.add(Menu.NONE, 0, 0, R.string.unarchive_task);
+		menu.add(Menu.NONE, 1, 0, R.string.delete_task);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
 				.getMenuInfo();
-
-		if (item.getItemId() == 0) {
-			EventHandler.getInstance().archiveTask(info.id);
+		int id = item.getItemId();
+		if (id == 0) {
+			EventHandler.getInstance().unarchiveTask(info.id);
+		}
+		else if (id == 1) {
+			EventHandler.getInstance().deleteTask(info.id);
 		}
 		return true;
 	}
@@ -145,20 +145,35 @@ public class TaskArchivedListActivity extends Activity implements Observer {
 			loadingDialog.setMessage(getString(R.string.loading));
 			loadingDialog.setIndeterminate(true);
 			return loadingDialog;
-		case Common.CONFIRM_ARCHIVE_ALL_TASKS_DIALOG:
+		case Common.CONFIRM_UNARCHIVE_ALL_TASKS_DIALOG:
 			return DialogManager.getDialog(this, id,
-					new OnConfirmArchiveDialogListener());
+					new OnConfirmUnrchiveDialogListener());
+		case Common.CONFIRM_DELETE_ALL_ARCHIVED_TASKS_DIALOG:
+			return DialogManager.getDialog(this, id,
+					new OnConfirmDeleteDialogListener());
 		default:
 			break;
 		}
 		return super.onCreateDialog(id);
 	}
 
-	private static class OnConfirmArchiveDialogListener implements
+	private static class OnConfirmUnrchiveDialogListener implements
 			CommonDialogListener {
 
 		public void onPositiveResponse() {
-			EventHandler.getInstance().archiveAllTasks();
+			EventHandler.getInstance().unarchiveAllTasks();
+		}
+
+		public void onNegativeResponse() {
+		}
+
+	}
+
+	private static class OnConfirmDeleteDialogListener implements
+			CommonDialogListener {
+
+		public void onPositiveResponse() {
+			EventHandler.getInstance().deleteAllArchivedTasks();
 		}
 
 		public void onNegativeResponse() {
@@ -174,19 +189,11 @@ public class TaskArchivedListActivity extends Activity implements Observer {
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-	private OnClickListener addClickListener = new OnClickListener() {
-
-		public void onClick(View v) {
-			startActivityForResult(new Intent(TaskArchivedListActivity.this,
-					TaskAddEditActivity.class), 0);
-		}
-	};
-
-	private OnClickListener archiveAllClickListener = new OnClickListener() {
+	private OnClickListener unarchiveAllClickListener = new OnClickListener() {
 
 		public void onClick(View v) {
 			if (mListAdapter.getCount() > 0) {
-				showDialog(Common.CONFIRM_ARCHIVE_ALL_TASKS_DIALOG);
+				showDialog(Common.CONFIRM_UNARCHIVE_ALL_TASKS_DIALOG);
 			}
 		}
 	};
@@ -195,7 +202,7 @@ public class TaskArchivedListActivity extends Activity implements Observer {
 
 		public void onClick(View v) {
 			if (mListAdapter.getCount() > 0) {
-				showDialog(Common.DELETE_ALL_TASKS_CMD);
+				showDialog(Common.CONFIRM_DELETE_ALL_ARCHIVED_TASKS_DIALOG);
 			}
 		}
 	};
@@ -222,7 +229,7 @@ public class TaskArchivedListActivity extends Activity implements Observer {
 		List<String> positions = dbHelper.getRecentOffersPositions();
 		dbHelper.close();
 
-		positions.add(0, "All offers");
+		positions.add(0, getString(R.string.all_offers));
 		String[] offerStrings = (String[]) positions
 				.toArray(new String[positions.size()]);
 
@@ -263,7 +270,8 @@ public class TaskArchivedListActivity extends Activity implements Observer {
 
 		}
 
-		public void onNothingSelected(AdapterView<?> arg0) {}
+		public void onNothingSelected(AdapterView<?> arg0) {
+		}
 	};
 
 }

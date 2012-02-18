@@ -69,6 +69,26 @@ public class DialogManager {
                                 }
                             }).create();
             return dlg;
+        case Common.CONFIRM_UNARCHIVE_ALL_TASKS_DIALOG:
+            dlg = new AlertDialog.Builder(context)
+                    .setTitle(R.string.unarchive_all_tasks_confirmation)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setMessage(R.string.confirm_unarchive_all_tasks)
+                    .setPositiveButton(R.string.unarchive,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                        int whichButton) {
+                                    listener.onPositiveResponse();
+                                }
+                            })
+                    .setNegativeButton(R.string.cancel,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                        int whichButton) {
+                                    listener.onNegativeResponse();
+                                }
+                            }).create();
+            return dlg;
         case Common.CONFIRM_DELETE_ALL_OFFERS_DIALOG:
             dlg = new AlertDialog.Builder(context)
                     .setTitle(R.string.delete_all_offers_confirmation)
@@ -130,7 +150,7 @@ public class DialogManager {
                                 }
                             }).create();
             return dlg;
-        case Common.CONFIRM_DELETE_ALL_TASKS_DIALOG:
+        case Common.CONFIRM_DELETE_ALL_RECENT_TASKS_DIALOG:
             dlg = new AlertDialog.Builder(context)
                     .setTitle(R.string.delete_all_tasks_confirmation)
                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -150,11 +170,31 @@ public class DialogManager {
                                 }
                             }).create();
             return dlg;
+        case Common.CONFIRM_DELETE_ALL_ARCHIVED_TASKS_DIALOG:
+            dlg = new AlertDialog.Builder(context)
+                    .setTitle(R.string.delete_all_archived_tasks_confirmation)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setMessage(R.string.confirm_delete_all_archived_tasks)
+                    .setPositiveButton(R.string.delete,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                        int whichButton) {
+                                    listener.onPositiveResponse();
+                                }
+                            })
+                    .setNegativeButton(R.string.cancel,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                        int whichButton) {
+                                    listener.onNegativeResponse();
+                                }
+                            }).create();
+            return dlg;
         case Common.ADDING_EMPTY_OFFER_DIALOG:
             dlg = new AlertDialog.Builder(context)
                     .setTitle(R.string.enter_offer_position)
                     .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setMessage(R.string.enter_at_least_position_of_the_offer)
+                    .setMessage(R.string.enter_at_least_position_and_employer)
                     .setNegativeButton(R.string.ok,
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,

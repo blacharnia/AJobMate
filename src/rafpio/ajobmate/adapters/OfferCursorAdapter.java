@@ -51,16 +51,16 @@ public class OfferCursorAdapter extends CursorAdapter {
 
 		String phoneNumber = cursor.getString(cursor
 				.getColumnIndex(DBOfferHandler.KEY_PHONE_NR));
-		if (TextUtils.isEmpty(employer)) {
+		if (TextUtils.isEmpty(phoneNumber)) {
 			((TextView) view.findViewById(R.id.phoneNr))
-					.setText("No employer provided");
+					.setText("No phone number provided");
 		} else {
 			((TextView) view.findViewById(R.id.phoneNr)).setText(phoneNumber);
 		}
 
 		String email = cursor.getString(cursor
 				.getColumnIndex(DBOfferHandler.KEY_EMAIL));
-		if (TextUtils.isEmpty(employer)) {
+		if (TextUtils.isEmpty(email)) {
 			((TextView) view.findViewById(R.id.email))
 					.setText("No email provided");
 		} else {

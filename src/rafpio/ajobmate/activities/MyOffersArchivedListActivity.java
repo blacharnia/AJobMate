@@ -39,7 +39,6 @@ public class MyOffersArchivedListActivity extends Activity implements Observer {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.my_offers_archived);
-
 		EventHandler.getInstance().addObserver(this);
 
 		mOffersList = (ListView) findViewById(R.id.offers);
@@ -99,6 +98,7 @@ public class MyOffersArchivedListActivity extends Activity implements Observer {
 				mListAdapter.changeCursor(cursor);
 			}
 			int cnt = cursor.getCount();
+			
 			deleteAllButton.setEnabled(cnt > 0);
 			unarchiveAllButton.setEnabled(cnt > 0);
 		}
@@ -154,7 +154,8 @@ public class MyOffersArchivedListActivity extends Activity implements Observer {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-		menu.add(Menu.NONE, 0, 0, "Delete offer");
+		menu.add(Menu.NONE, 0, 0, R.string.unarchive_offer);
+		menu.add(Menu.NONE, 0, 1, R.string.delete_offer);
 
 	}
 
@@ -163,7 +164,11 @@ public class MyOffersArchivedListActivity extends Activity implements Observer {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
 				.getMenuInfo();
 
-		if (item.getItemId() == 0) {
+		int id = item.getItemId();
+		if (id == 0) {
+			EventHandler.getInstance().unarchiveOffer(info.id);
+		}
+		else if (id == 1) {
 			EventHandler.getInstance().deleteOffer(info.id);
 		}
 		return true;

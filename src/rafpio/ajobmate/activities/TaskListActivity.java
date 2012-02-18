@@ -40,7 +40,6 @@ public class TaskListActivity extends Activity implements Observer {
 	private Spinner offerSpinner;
 	private List<Object> offers;
 	private long mOfferId;
-	private boolean archivedItems;
 	private Button addButton;
 	private Button archiveAllButton;
 	private Button deleteAllButton;
@@ -81,19 +80,8 @@ public class TaskListActivity extends Activity implements Observer {
 	private void init() {
 		populateOffers();
 		Bundle extras = getIntent().getExtras();
-		
-		if (null == extras) {
-			addButton.setVisibility(View.VISIBLE);
-			archiveAllButton.setVisibility(View.VISIBLE);
-			deleteAllButton.setVisibility(View.GONE);
-		} else {
-			archivedItems = extras.getBoolean("archive", false);
-			if (archivedItems) {
-				addButton.setVisibility(View.GONE);
-				archiveAllButton.setVisibility(View.GONE);
-				deleteAllButton.setVisibility(View.VISIBLE);
-			}
 
+		if (null != extras) {
 			mOfferId = extras.getLong(DBTaskHandler.KEY_OFFER_ID);
 			if (mOfferId > 0) {
 				offerSpinner.setSelection(1 + getOfferIndexById(mOfferId));
@@ -111,22 +99,13 @@ public class TaskListActivity extends Activity implements Observer {
 		final JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
 		dbHelper.open();
 		Cursor cursor;
-		
-		if(archivedItems){
-			if (mOfferId == 0) {
-				cursor = dbHelper.getArchivedTasks();
-			} else {
-				cursor = dbHelper.getArchivedTasksForOffer(mOfferId);
-			}
+
+		if (mOfferId == 0) {
+			cursor = dbHelper.getRecentTasks();
+		} else {
+			cursor = dbHelper.getRecentTasksForOffer(mOfferId);
 		}
-		else{
-			if (mOfferId == 0) {
-				cursor = dbHelper.getRecentTasks();
-			} else {
-				cursor = dbHelper.getRecentTasksForOffer(mOfferId);
-			}
-		}
-		
+
 		if (cursor != null) {
 			if (mListAdapter == null) {
 				mListAdapter = new TaskCursorAdapter(getApplicationContext(),
@@ -135,8 +114,9 @@ public class TaskListActivity extends Activity implements Observer {
 			} else {
 				mListAdapter.changeCursor(cursor);
 			}
-			findViewById(R.id.archiveAll).setEnabled(cursor.getCount() > 0);
-
+			int cnt = cursor.getCount();
+			archiveAllButton.setEnabled(cnt > 0);
+			deleteAllButton.setEnabled(cnt > 0);
 		}
 		dbHelper.close();
 
@@ -146,6 +126,7 @@ public class TaskListActivity extends Activity implements Observer {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		menu.add(Menu.NONE, 0, 0, R.string.archive_task);
+		menu.add(Menu.NONE, 1, 0, R.string.delete_task);
 	}
 
 	@Override
@@ -153,8 +134,11 @@ public class TaskListActivity extends Activity implements Observer {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
 				.getMenuInfo();
 
-		if (item.getItemId() == 0) {
+		int id = item.getItemId();
+		if (id == 0) {
 			EventHandler.getInstance().archiveTask(info.id);
+		} else if (id == 1) {
+			EventHandler.getInstance().deleteTask(info.id);
 		}
 		return true;
 	}
@@ -170,6 +154,9 @@ public class TaskListActivity extends Activity implements Observer {
 		case Common.CONFIRM_ARCHIVE_ALL_TASKS_DIALOG:
 			return DialogManager.getDialog(this, id,
 					new OnConfirmArchiveDialogListener());
+		case Common.CONFIRM_DELETE_ALL_RECENT_TASKS_DIALOG:
+			return DialogManager.getDialog(this, id,
+					new OnConfirmDeleteDialogListener());
 		default:
 			break;
 		}
@@ -181,6 +168,17 @@ public class TaskListActivity extends Activity implements Observer {
 
 		public void onPositiveResponse() {
 			EventHandler.getInstance().archiveAllTasks();
+		}
+
+		public void onNegativeResponse() {
+		}
+	}
+
+	private static class OnConfirmDeleteDialogListener implements
+			CommonDialogListener {
+
+		public void onPositiveResponse() {
+			EventHandler.getInstance().deleteAllRecentTasks();
 		}
 
 		public void onNegativeResponse() {
@@ -217,7 +215,7 @@ public class TaskListActivity extends Activity implements Observer {
 
 		public void onClick(View v) {
 			if (mListAdapter.getCount() > 0) {
-				showDialog(Common.DELETE_ALL_TASKS_CMD);
+				showDialog(Common.CONFIRM_DELETE_ALL_RECENT_TASKS_DIALOG);
 			}
 		}
 	};

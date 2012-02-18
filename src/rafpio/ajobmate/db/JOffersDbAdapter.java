@@ -248,4 +248,12 @@ public class JOffersDbAdapter {
 	public void unarchiveAllOffers() {
 		mOfferHandler.unarchiveAll();
 	}
+
+	public void unarchiveTask(Long param) {
+		mTaskHandler.unArchive(param);
+	}
+
+	public void unarchiveOffer(long param) {
+		mOfferHandler.unArchive(param);
+	}
 }

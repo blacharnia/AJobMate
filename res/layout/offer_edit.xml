@@ -1,69 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent">
-	<ScrollView android:layout_width="fill_parent"
-		android:layout_alignParentTop="true" android:layout_above="@+id/option_panel"
-		android:layout_height="fill_parent">
-		<LinearLayout android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:orientation="vertical">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-			<TextView android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:text="Position" />
-			<EditText android:id="@+id/position" android:layout_width="fill_parent"
-				android:layout_height="wrap_content"/>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/option_panel"
+        android:layout_alignParentTop="true" >
 
-			<TextView android:text="Employer" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-			<EditText android:id="@+id/employer" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-			<TextView android:text="Phone number" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-			<EditText android:id="@+id/phone_nr"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Position" />
 
-			<TextView android:text="Email" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-			<EditText android:id="@+id/email"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/position"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-			<TextView android:text="Location" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-			<EditText android:id="@+id/location"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Employer" />
 
-			<TextView android:text="Latitude" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-			<EditText android:id="@+id/latitude"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/employer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-			<TextView android:text="Longitude" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-			<EditText android:id="@+id/longitude"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Phone number" />
 
-			<TextView android:text="Description" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-			<EditText android:id="@+id/description" 
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/phone_nr"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-		</LinearLayout>
-	</ScrollView>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Email" />
 
-	<LinearLayout android:id="@+id/option_panel"
-		android:layout_above="@+id/hint" android:orientation="horizontal"
-		android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-		<Button android:id="@+id/confirm" android:text="@string/confirm"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" />
-		<Button android:id="@+id/cancel" android:text="@string/cancel"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Location" />
 
-	</LinearLayout>
+            <EditText
+                android:id="@+id/location"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-	<TextView android:id="@+id/hint" android:layout_width="fill_parent"
-		android:layout_alignParentBottom="true" android:layout_height="wrap_content"
-		android:text="Press option buttons, eventually MENU hard key for actions" />
+            <RelativeLayout
+                android:id="@+id/gps_sublayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+                <TextView
+                    android:id="@+id/gps_latitude_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@id/gps_location"
+                    android:text="Latitude" />
+
+                <EditText
+                    android:id="@+id/latitude"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/gps_latitude_text"
+                    android:layout_toLeftOf="@id/gps_location" />
+
+                <TextView
+                    android:id="@+id/gps_longitude_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/latitude"
+                    android:layout_toLeftOf="@id/gps_location"
+                    android:text="Longitude" />
+
+                <EditText
+                    android:id="@+id/longitude"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/gps_longitude_text"
+                    android:layout_toLeftOf="@id/gps_location" />
+
+                <Button
+                    android:id="@+id/gps_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="Get \n location" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Description" />
+
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/option_panel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/hint"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/hint"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Press option buttons, eventually MENU hard key for actions" />
 
 </RelativeLayout>

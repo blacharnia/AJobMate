@@ -26,24 +26,36 @@
 	<string name="unarchive">Unarchive</string>
 	<string name="confirm_archive_all_offers">Pressing archive will archive all offers</string>
 	<string name="confirm_unarchive_all_offers">Pressing archive will unarchive all offers</string>
+	<string name="confirm_unarchive_all_tasks">Pressing archive will unarchive all tasks</string>
 	<string name="confirm_archive_all_tasks">Pressing archive will archive all tasks</string>
 	<string name="confirm_delete_all_offers">Pressing delete will delete all offers</string>
     <string name="confirm_delete_all_tasks">Pressing delete will delete all tasks</string>
-    
+    <string name="confirm_delete_all_archived_tasks">Pressing delete will delete all archived tasks</string>
 	<string name="enter_offer_position">Enter offer position</string>
 	<string name="enter_task_description">Enter task description</string>
 	<string name="ok">OK</string>
-	<string name="enter_at_least_position_of_the_offer">Enter at least position of the offer!</string>
+	<string name="enter_at_least_position_and_employer">Enter at least position and employer!</string>
 	<string name="enter_at_least_description_of_the_task">Enter at least description of the task!</string>
 	<string name="archive_task">Archive task</string>
-	<string name="loading">Loading...</string>
+	<string name="unarchive_task">Unarchive task</string>
+	<string name="delete_task">Delete task</string>
+	<string name="loading">Loading..</string>
 	<string name="archive_all_offers_confirmation">Archive all offers?</string>
 	<string name="unarchive_all_offers_confirmation">Unarchive all offers?</string>
+	<string name="unarchive_all_tasks_confirmation">Unarchive all tasks?</string>
 	<string name="archive_all_tasks_confirmation">Archive all tasks?</string>
 	<string name="delete_all_offers_confirmation">Delete all offers?</string>
     <string name="delete_all_tasks_confirmation">Delete all tasks?</string>
+    <string name="delete_all_archived_tasks_confirmation">Delete all archived tasks?</string>
 	<string name="none">none</string>
 	<string name="starttime">start time: </string>
 	<string name="endtime">end time: </string>
+	<string name="delete_offer">Delete offer</string>
+	<string name="unarchive_offer">Unarchive offer</string>
+	<string name="all_offers">All offers</string>
+	<string name="time">time</string>
+	<string name="latitude">latitude</string>
+	<string name="longitude">longitude</string>
+	<string name="add_new">Add new..</string>
 
 </resources>

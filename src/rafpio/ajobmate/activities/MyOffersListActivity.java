@@ -16,6 +16,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -89,25 +90,36 @@ public class MyOffersListActivity extends Activity implements Observer {
 	}
 
 	private void loadOffers() {
-		final JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-		dbHelper.open();
-		Cursor cursor = dbHelper.getRecentOffers();
+	    new AsyncTask<Void, Integer, Void>() {
+	        Cursor cursor;
+	        
+	        @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+                if (cursor != null) {
+                    if (mListAdapter == null) {
+                        mListAdapter = new OfferCursorAdapter(getApplicationContext(),
+                                cursor);
+                        mOffersList.setAdapter(mListAdapter);
+                    } else {
+                        mListAdapter.changeCursor(cursor);
+                    }
+                    
+                    //TODO:consider placing it somewhere else
+                    archiveAllButton.setEnabled(cursor.getCount() > 0);
+                    deleteAllButton.setEnabled(cursor.getCount() > 0);
 
-		if (cursor != null) {
-			if (mListAdapter == null) {
-				mListAdapter = new OfferCursorAdapter(getApplicationContext(),
-						cursor);
-				mOffersList.setAdapter(mListAdapter);
-			} else {
-				mListAdapter.changeCursor(cursor);
-			}
-			
-			//TODO:consider placing it somewhere else
-			archiveAllButton.setEnabled(cursor.getCount() > 0);
-			deleteAllButton.setEnabled(cursor.getCount() > 0);
-
-		}
-		dbHelper.close();
+                }
+            }
+	        
+            @Override
+            protected Void doInBackground(Void... params) {
+                cursor =  JOffersDbAdapter.getInstance().getRecentOffers();
+                return null;
+            }
+	    }.execute();
+	    
+		
 	}
 
 	private static class OnConfirmArchiveDialogListener implements
@@ -155,7 +167,7 @@ public class MyOffersListActivity extends Activity implements Observer {
 
 		public void onClick(View v) {
 			if (mListAdapter.getCount() > 0) {
-				showDialog(Common.DELETE_ALL_OFFERS_CMD);
+				showDialog(Common.CONFIRM_DELETE_ALL_OFFERS_DIALOG);
 			}
 		}
 	};
@@ -170,6 +182,7 @@ public class MyOffersListActivity extends Activity implements Observer {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		menu.add(Menu.NONE, 0, 0, "Archive offer");
+		menu.add(Menu.NONE, 1, 0, "Delete offer");
 	}
 
 	@Override
@@ -177,8 +190,12 @@ public class MyOffersListActivity extends Activity implements Observer {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
 				.getMenuInfo();
 
-		if (item.getItemId() == 0) {
+		int id = item.getItemId();
+		if ( id == 0) {
 			EventHandler.getInstance().archiveOffer(info.id);
+		}
+		else if (id == 1) {
+			EventHandler.getInstance().deleteOffer(info.id);
 		}
 
 		return true;

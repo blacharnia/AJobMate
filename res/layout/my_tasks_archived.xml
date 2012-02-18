@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/offers_panel" android:layout_width="fill_parent"
+	android:id="@+id/tasks_panel" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 
-	<FrameLayout android:layout_alignParentTop="true"
-		android:layout_above="@+id/optionPanel" android:layout_width="wrap_content"
-		android:layout_height="wrap_content">
-		<ListView android:id="@+id/offers" android:layout_width="fill_parent"
+	<Spinner android:layout_width="fill_parent"
+		android:layout_alignParentTop="true" android:layout_height="wrap_content"
+		android:id="@+id/offers" android:layout_alignParentRight="true"
+		android:layout_marginRight="32dp" />
+
+	<FrameLayout android:id="@+id/tasks_layout"
+		android:layout_below="@+id/offers" android:layout_above="@+id/optionPanel"
+		android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<ListView android:id="@+id/tasks" android:layout_width="fill_parent"
 			android:layout_height="fill_parent" />
 		<TextView android:id="@+id/empty" android:layout_width="fill_parent"
 			android:visibility="gone" android:layout_height="wrap_content"
-			android:text="@string/no_offers" />
+			android:text="@string/no_tasks" />
 	</FrameLayout>
 
 	<LinearLayout android:id="@+id/optionPanel"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:layout_above="@+id/hint">
-		<Button android:id="@+id/add" android:layout_height="wrap_content"
-			android:text="@string/add_new" android:layout_width="wrap_content" />
-		<Button android:id="@+id/archiveAll" android:layout_height="wrap_content"
-			android:text="@string/archive_all" android:layout_width="wrap_content" />
+		android:layout_above="@id/hint">
+		<Button android:id="@+id/unarchiveAll" android:layout_height="wrap_content"
+			android:text="@string/unarchive_all" android:layout_width="wrap_content" />
 		<Button android:id="@+id/deleteAll" android:layout_height="wrap_content"
             android:text="@string/delete_all" android:layout_width="wrap_content" />
 	</LinearLayout>
