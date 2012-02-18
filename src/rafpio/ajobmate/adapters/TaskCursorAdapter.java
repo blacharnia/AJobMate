@@ -75,15 +75,12 @@ public class TaskCursorAdapter extends CursorAdapter {
 
     private String getOfferPositionbyId(long id) {
         String position;
-        JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-        dbHelper.open();
-        Offer offer = dbHelper.getOffer(id);
+        Offer offer = JOffersDbAdapter.getInstance().getOffer(id);
         if (offer != null) {
             position = offer.getPosition();
         } else {
             position = "<none>";
         }
-        dbHelper.close();
         return position;
     }
 }

@@ -113,10 +113,7 @@ public class MyOfferAddEditActivity extends Activity {
         }
 
         if (mRowId > 0) {
-            JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-            dbHelper.open();
-            offer = dbHelper.getOffer(mRowId);
-            dbHelper.close();
+            JOffersDbAdapter.getInstance().getOffer(mRowId);
             populateFields();
         } else {
             offer = new Offer();

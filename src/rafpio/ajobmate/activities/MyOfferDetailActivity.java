@@ -169,10 +169,7 @@ public class MyOfferDetailActivity extends Activity  implements Observer{
 
 	private void populateFields() {
 		if (mRowId > 0) {
-			JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-			dbHelper.open();
-			offer = dbHelper.getOffer(mRowId);
-			dbHelper.close();
+			offer = JOffersDbAdapter.getInstance().getOffer(mRowId);
 
 			if (null != offer) {
 				mPositionText.setText(offer.getPosition());
@@ -229,13 +226,10 @@ public class MyOfferDetailActivity extends Activity  implements Observer{
 
 	private void setupTasksPanel() {
 		int cnt = 0;
-		JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-		dbHelper.open();
-		Cursor tasks = dbHelper.getRecentTasksForOffer(mRowId);
+		Cursor tasks = JOffersDbAdapter.getInstance().getRecentTasksForOffer(mRowId);
 		if (tasks != null) {
 			cnt = tasks.getCount();
 		}
-		dbHelper.close();
 		mTasksMessage.setText(String.valueOf(cnt + " tasks for this offer"));
 		mShowTasks.setEnabled(cnt > 0);
 	}
