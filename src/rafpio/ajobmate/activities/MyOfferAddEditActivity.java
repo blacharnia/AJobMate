@@ -1,8 +1,13 @@
 package rafpio.ajobmate.activities;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import rafpio.ajobmate.R;
 import rafpio.ajobmate.core.Common;
 import rafpio.ajobmate.core.DialogManager;
+import rafpio.ajobmate.core.EventHandler;
+import rafpio.ajobmate.core.EventHandler.OpResult;
 import rafpio.ajobmate.core.ILastLocationFinder;
 import rafpio.ajobmate.db.DBOfferHandler;
 import rafpio.ajobmate.db.JOffersDbAdapter;
@@ -14,14 +19,13 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-
-//FIXME: disable adding offer when one with the same employer and position exists
-public class MyOfferAddEditActivity extends Activity {
+public class MyOfferAddEditActivity extends Activity implements Observer {
     private Button getLocationBtn;
     private EditText mPositionText;
     private EditText mEmployerText;
@@ -38,6 +42,7 @@ public class MyOfferAddEditActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         lastLocationFinder = Common.getLastLocationFinder(this);
         lastLocationFinder
                 .setChangedLocationListener(oneShotLastLocationUpdateListener);
@@ -72,10 +77,9 @@ public class MyOfferAddEditActivity extends Activity {
                     } else {
                         updateOffer();
                     }
-                    setResult(RESULT_OK);
-                    finish();
+
                 } else {
-                    showDialog(Common.ADDING_EMPTY_OFFER_DIALOG);                    
+                    showDialog(DialogManager.ADDING_EMPTY_OFFER_DIALOG);
                 }
             }
         });
@@ -89,6 +93,12 @@ public class MyOfferAddEditActivity extends Activity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventHandler.getInstance().addObserver(this);
+    }
+
     private boolean isEnoughDataProvided() {
         return !TextUtils.isEmpty(mPositionText.getText().toString().trim())
                 && !TextUtils
@@ -98,8 +108,9 @@ public class MyOfferAddEditActivity extends Activity {
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
-        case Common.ADDING_EMPTY_OFFER_DIALOG:
-            return DialogManager.getDialog(this, id, null);
+        case DialogManager.OFFER_EXISTS_DIALOG:
+        case DialogManager.ADDING_EMPTY_OFFER_DIALOG:
+            return DialogManager.getInstance().getDialog(this, id, null);
         default:
             break;
         }
@@ -113,7 +124,7 @@ public class MyOfferAddEditActivity extends Activity {
         }
 
         if (mRowId > 0) {
-            JOffersDbAdapter.getInstance().getOffer(mRowId);
+            offer = JOffersDbAdapter.getInstance().getOffer(mRowId);
             populateFields();
         } else {
             offer = new Offer();
@@ -148,7 +159,7 @@ public class MyOfferAddEditActivity extends Activity {
     }
 
     private void createOffer() {
-        JOffersDbAdapter.getInstance().createOffer(offer);
+        EventHandler.getInstance().addOffer(offer);
     }
 
     protected void updateOffer() {
@@ -162,6 +173,7 @@ public class MyOfferAddEditActivity extends Activity {
             mLocationText.setText(offer.getLocation());
             mDescriptionText.setText(Html.fromHtml(offer.getDescription())
                     .toString());
+
             mEmailText.setText(offer.getEmail());
 
             double latitude = offer.getLatitude();
@@ -228,4 +240,28 @@ public class MyOfferAddEditActivity extends Activity {
         public void onProviderEnabled(String provider) {
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventHandler.getInstance().deleteObserver(this);
+    }
+
+    public void update(Observable observable, Object data) {
+        OpResult opResult = (OpResult) data;
+
+        switch (opResult.status) {
+        case EventHandler.OFFER_ADDED:
+            setResult(RESULT_OK);
+            finish();
+            break;
+        case EventHandler.OFFER_NOT_ADDED:
+            // FIXME: should not occur but handle anyway
+            Log.d("RP", "update2");
+            break;
+        case EventHandler.OFFER_EXISTS:
+            showDialog(DialogManager.OFFER_EXISTS_DIALOG);
+            break;
+        }
+    }
 }

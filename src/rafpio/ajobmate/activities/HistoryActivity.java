@@ -11,13 +11,14 @@ public class HistoryActivity extends TabActivity {
 
         final TabHost tabHost = getTabHost();
 
-        tabHost.addTab(tabHost.newTabSpec("Offers")
+        tabHost.addTab(tabHost
+                .newTabSpec("Offers")
                 .setIndicator("Offers")
-                .setContent(new Intent(this, MyOffersArchivedListActivity.class)));
+                .setContent(
+                        new Intent(this, MyOffersArchivedListActivity.class)));
 
-        tabHost.addTab(tabHost.newTabSpec("Tasks")
-                .setIndicator("Tasks")
+        tabHost.addTab(tabHost.newTabSpec("Tasks").setIndicator("Tasks")
                 .setContent(new Intent(this, TaskArchivedListActivity.class)));
-        
+
     }
 }

@@ -3,6 +3,7 @@ package rafpio.ajobmate.core;
 import rafpio.ajobmate.db.JOffersDbAdapter;
 import android.app.Application;
 import android.app.PendingIntent;
+import android.util.Log;
 
 public class JobmateApplication extends Application {
 
@@ -11,17 +12,15 @@ public class JobmateApplication extends Application {
     }
 
     private PendingIntent pendingIntent;
-    
+
     private static JobmateApplication appInstance;
 
     @Override
     public void onCreate() {
         appInstance = this;
-        
-        
         super.onCreate();
     }
- 
+
     public void setPendingIntent(PendingIntent pendingIntent) {
         this.pendingIntent = pendingIntent;
     }

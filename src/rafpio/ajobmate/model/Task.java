@@ -14,7 +14,8 @@ public class Task {
     }
 
     public Task(long Id, String Description, long OfferId, long StartTime,
-            long EndTime, long NotificationTime, String Category, boolean Archive) {
+            long EndTime, long NotificationTime, String Category,
+            boolean Archive) {
         id = Id;
         description = Description;
         offerId = OfferId;
@@ -81,11 +82,11 @@ public class Task {
         return archive;
     }
 
-	public void setNotificationTime(long notificationTime) {
-		this.notificationTime = notificationTime;
-	}
+    public void setNotificationTime(long notificationTime) {
+        this.notificationTime = notificationTime;
+    }
 
-	public long getNotificationTime() {
-		return notificationTime;
-	}
+    public long getNotificationTime() {
+        return notificationTime;
+    }
 }

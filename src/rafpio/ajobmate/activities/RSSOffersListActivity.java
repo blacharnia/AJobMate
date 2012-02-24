@@ -61,14 +61,11 @@ public class RSSOffersListActivity extends Activity implements Observer {
 
     private int getRssOfferCnt() {
         int cnt = 0;
-        final JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-        dbHelper.open();
-        Cursor cursor = dbHelper.getAllRssOffers();
+        Cursor cursor = JOffersDbAdapter.getInstance().getAllRssOffers();
         if (cursor != null) {
             cnt = cursor.getCount();
             cursor.close();
         }
-        dbHelper.close();
         return cnt;
     }
 
@@ -110,9 +107,7 @@ public class RSSOffersListActivity extends Activity implements Observer {
     }
 
     private void loadRSSOffers() {
-        final JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-        dbHelper.open();
-        Cursor cursor = dbHelper.getAllRssOffers();
+        Cursor cursor = JOffersDbAdapter.getInstance().getAllRssOffers();
         if (cursor != null) {
             if (mRssListAdapter == null) {
                 mRssListAdapter = new RssOfferCursorAdapter(
@@ -124,7 +119,6 @@ public class RSSOffersListActivity extends Activity implements Observer {
             findViewById(R.id.reload).setEnabled(true);
 
         }
-        dbHelper.close();
     }
 
 }

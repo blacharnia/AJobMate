@@ -35,8 +35,11 @@ public class JOffersDbAdapter {
     private JOffersDbAdapter() {
     }
 
-    public void init(Context ctxt) {
-        mCtx = ctxt;
+    public void open(Context ctxt) {
+        if (mDbHelper == null) {
+            mCtx = ctxt;
+            open();
+        }
     }
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -64,7 +67,7 @@ public class JOffersDbAdapter {
         }
     }
 
-    public JOffersDbAdapter open() throws SQLException {
+    private JOffersDbAdapter open() throws SQLException {
         mDbHelper = new DatabaseHelper(mCtx);
         try {
             mDb = mDbHelper.getWritableDatabase();
@@ -78,7 +81,10 @@ public class JOffersDbAdapter {
     }
 
     public void close() {
-        mDbHelper.close();
+        if (mDbHelper != null) {
+            mDbHelper.close();
+            mDbHelper = null;
+        }
     }
 
     public long createOffer(Offer offer) {
@@ -86,8 +92,9 @@ public class JOffersDbAdapter {
     }
 
     public long createOffer(final RSSMessage rssOffer) {
-        return mOfferHandler.create(new Offer(0, rssOffer.getTitle(), "", "",
-                "", "", rssOffer.getDescription(), 0d, 0d, false));
+        return mOfferHandler.create(new Offer(0, rssOffer.getTitle(),
+                "unknown employer", "", "", "", rssOffer.getDescription(), 0d,
+                0d, false));
     }
 
     public boolean archiveOffer(long rowId) {
@@ -105,15 +112,15 @@ public class JOffersDbAdapter {
     public void deleteAllOffers() {
         mOfferHandler.deleteAll();
     }
-    
+
     public void deleteAllTasks() {
         mTaskHandler.deleteAll();
     }
-    
+
     public Cursor getAllOffers() {
         return mOfferHandler.getAll();
     }
-    
+
     public Cursor getRecentOffers() {
         return mOfferHandler.getRecent();
     }
@@ -137,7 +144,7 @@ public class JOffersDbAdapter {
     public Cursor getAllTasks() {
         return mTaskHandler.getAll();
     }
-    
+
     public Cursor getRecentTasks() {
         return mTaskHandler.getRecent();
     }
@@ -157,7 +164,7 @@ public class JOffersDbAdapter {
     public List<Object> getRecentOffersAsList() {
         return mOfferHandler.getRecentAsList();
     }
-    
+
     public Task getTask(long rowId) {
         return (Task) mTaskHandler.getItem(rowId);
     }
@@ -165,7 +172,7 @@ public class JOffersDbAdapter {
     public List<String> getRecentOffersPositions() {
         return mOfferHandler.getRecentPositions();
     }
-    
+
     public List<String> getOffersPositions() {
         return mOfferHandler.getPositions();
     }
@@ -173,7 +180,7 @@ public class JOffersDbAdapter {
     public Cursor getAllTasksForOffer(long mRowId) {
         return mTaskHandler.getAllForOffer(mRowId);
     }
-    
+
     public Cursor getRecentTasksForOffer(long mRowId) {
         return mTaskHandler.getRecentForOffer(mRowId);
     }
@@ -199,8 +206,8 @@ public class JOffersDbAdapter {
             mRSSOfferHandler.create(rssOffer);
         }
     }
-    
-    public void resetTaskNotification(long taskId){
+
+    public void resetTaskNotification(long taskId) {
         mTaskHandler.resetNotification(taskId);
     }
 
@@ -208,52 +215,59 @@ public class JOffersDbAdapter {
         return mOfferHandler.getArchived();
     }
 
-    
     public void deleteOffer(long rowid) {
         mOfferHandler.delete(rowid);
     }
-    
+
     public void deleteTask(long rowid) {
         mTaskHandler.delete(rowid);
     }
 
-	public Cursor getArchivedTasks() {
-		return mTaskHandler.getArchived();
-	}
-	
-	public Cursor getArchivedTasksForOffer(long mRowId) {
+    public Cursor getArchivedTasks() {
+        return mTaskHandler.getArchived();
+    }
+
+    public Cursor getArchivedTasksForOffer(long mRowId) {
         return mTaskHandler.getArchivedForOffer(mRowId);
     }
 
-	public void deleteAllRecentOffers() {
-		mOfferHandler.deleteAllRecent();
-	}
-	
-	public void deleteAllArchivedOffers() {
-		mOfferHandler.deleteAllArchived();
-	}
-	
-	public void deleteAllArchivedTasks() {
-		mTaskHandler.deleteAllArchived();
-	}
-	
-	public void deleteAllRecentTasks() {
-		mTaskHandler.deleteAllRecent();
-	}
+    public void deleteAllRecentOffers() {
+        mOfferHandler.deleteAllRecent();
+    }
 
-	public void unarchiveAllTasks() {
-		mTaskHandler.unarchiveAll();
-	}
+    public void deleteAllArchivedOffers() {
+        mOfferHandler.deleteAllArchived();
+    }
 
-	public void unarchiveAllOffers() {
-		mOfferHandler.unarchiveAll();
-	}
+    public void deleteAllArchivedTasks() {
+        mTaskHandler.deleteAllArchived();
+    }
 
-	public void unarchiveTask(Long param) {
-		mTaskHandler.unArchive(param);
-	}
+    public void deleteAllRecentTasks() {
+        mTaskHandler.deleteAllRecent();
+    }
 
-	public void unarchiveOffer(long param) {
-		mOfferHandler.unArchive(param);
-	}
+    public void unarchiveAllTasks() {
+        mTaskHandler.unarchiveAll();
+    }
+
+    public void unarchiveAllOffers() {
+        mOfferHandler.unarchiveAll();
+    }
+
+    public void unarchiveTask(Long param) {
+        mTaskHandler.unArchive(param);
+    }
+
+    public void unarchiveOffer(long param) {
+        mOfferHandler.unArchive(param);
+    }
+
+    public Task getTaskFromCursor(Cursor cursor) {
+        return (Task) mTaskHandler.getItemFromCursor(cursor);
+    }
+
+    public boolean isOfferExists(String position, String employer) {
+        return mOfferHandler.isExists(position, employer);
+    }
 }

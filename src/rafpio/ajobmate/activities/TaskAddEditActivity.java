@@ -19,6 +19,7 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -51,7 +52,7 @@ public class TaskAddEditActivity extends Activity {
         startTimeButton = (Button) findViewById(R.id.startTime);
         endTimeButton = (Button) findViewById(R.id.endTime);
         notificationTimeButton = (Button) findViewById(R.id.notificationTime);
-        offerSpinner = (Spinner) findViewById(R.id.offer);   
+        offerSpinner = (Spinner) findViewById(R.id.offer);
 
         // button event listeners
         confirmButton.setOnClickListener(confirmButtonClickListener);
@@ -66,7 +67,7 @@ public class TaskAddEditActivity extends Activity {
         public void onClick(View v) {
 
             if (descriptionEdit.getText().toString().trim().equals("")) {
-                showDialog(Common.ADDING_EMPTY_TASK_DIALOG);
+                showDialog(DialogManager.ADDING_EMPTY_TASK_DIALOG);
             } else {
                 setupTaskObject();
                 if (mRowId == 0) {
@@ -81,15 +82,15 @@ public class TaskAddEditActivity extends Activity {
     };
 
     @Override
-	protected void onStart() {
-    	populateOffers();
-    	if(task == null){
-    		init();
-    	}
-		super.onStart();
-	}
+    protected void onStart() {
+        populateOffers();
+        if (task == null) {
+            init();
+        }
+        super.onStart();
+    }
 
-	private OnClickListener cancelButtonClickListener = new View.OnClickListener() {
+    private OnClickListener cancelButtonClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             setResult(android.app.Activity.RESULT_CANCELED);
             finish();
@@ -98,22 +99,31 @@ public class TaskAddEditActivity extends Activity {
 
     private OnClickListener startTimeButtonClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-            startActivityForResult(new Intent(TaskAddEditActivity.this,
-                    DateTimePickerActivity.class), 0);
+            Intent intent = new Intent(TaskAddEditActivity.this,
+                    DateTimePickerActivity.class);
+            intent.putExtra("time", task.getStartTime());
+            intent.putExtra("caption", DBTaskHandler.KEY_START_TIME);
+            startActivityForResult(intent, 0);
         }
     };
 
     private OnClickListener endTimeButtonClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-            startActivityForResult(new Intent(TaskAddEditActivity.this,
-                    DateTimePickerActivity.class), 1);
+            Intent intent = new Intent(TaskAddEditActivity.this,
+                    DateTimePickerActivity.class);
+            intent.putExtra("time", task.getEndTime());
+            intent.putExtra("caption", DBTaskHandler.KEY_END_TIME);
+            startActivityForResult(intent, 1);
         }
     };
 
     private OnClickListener notificationTimeButtonClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-            startActivityForResult(new Intent(TaskAddEditActivity.this,
-                    DateTimePickerActivity.class), 2);
+            Intent intent = new Intent(TaskAddEditActivity.this,
+                    DateTimePickerActivity.class);
+            intent.putExtra("time", task.getNotificationTime());
+            intent.putExtra("caption", DBTaskHandler.KEY_NOTIFICATION_TIME);
+            startActivityForResult(intent, 2);
         }
     };
 
@@ -125,16 +135,14 @@ public class TaskAddEditActivity extends Activity {
         }
 
         if (mRowId > 0) {
-            JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-            dbHelper.open();
-            task = dbHelper.getTask(mRowId);
-            dbHelper.close();
+            task = JOffersDbAdapter.getInstance().getTask(mRowId);
             populateFields();
         } else {
             task = new Task();
             startTimeButton.setText("Press to set the start time");
             endTimeButton.setText("Press to set the end time");
-            notificationTimeButton.setText("Press to set the notification time");
+            notificationTimeButton
+                    .setText("Press to set the notification time");
         }
         if (mOfferId > 0) {
             task.setOfferId(mOfferId);
@@ -144,10 +152,7 @@ public class TaskAddEditActivity extends Activity {
     };
 
     protected void updateTask() {
-        JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-        dbHelper.open();
-        dbHelper.updateTask(task);
-        dbHelper.close();
+        JOffersDbAdapter.getInstance().updateTask(task);
     }
 
     protected void setupTaskObject() {
@@ -169,11 +174,12 @@ public class TaskAddEditActivity extends Activity {
     }
 
     private void createTask() {
-        JOffersDbAdapter dBase = JOffersDbAdapter.getInstance();
-        dBase.open();
-        dBase.createTask(task);
-        dBase.close();
+        JOffersDbAdapter.getInstance().createTask(task);
     }
+
+    // private boolean isStartEndDateValid(){
+
+    // / }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -183,24 +189,46 @@ public class TaskAddEditActivity extends Activity {
             if (extras != null) {
                 long time = extras.getLong(getString(R.string.time));
                 if (requestCode == 0) {
-                    task.setStartTime(time);
-                    startTimeButton.setText(Common.getTimeAsString(time));
-                    if(mRowId > 0){
-                    	updateTask();
+                    long endTime = task.getEndTime();
+                    if (time < endTime || endTime == 0) {
+                        task.setStartTime(time);
+                        startTimeButton.setText(Common.getTimeAsString(time));
+                        if (mRowId > 0) {
+                            updateTask();
+                        }
+                    } else {
+                        Log.d("RP", "onActivityResult1");
+                        // FIXME: notify user that start and date time are not
+                        // valid
                     }
                 } else if (requestCode == 1) {
-                    task.setEndTime(time);
-                    endTimeButton.setText(Common.getTimeAsString(time));
-                    if(mRowId > 0){
-                    	updateTask();
+
+                    long startTime = task.getStartTime();
+                    if (time > startTime) {
+                        task.setEndTime(time);
+                        endTimeButton.setText(Common.getTimeAsString(time));
+                        if (mRowId > 0) {
+                            updateTask();
+                        }
+                    } else {
+                        Log.d("RP", "onActivityResult2");
+                        // FIXME: notify user that start and date time are not
+                        // valid
                     }
                 } else if (requestCode == 2) {
-                    task.setNotificationTime(time);
-                    notificationTimeButton.setText(Common.getTimeAsString(time));
-                    if(mRowId > 0){
-                    	updateTask();
+                    if (time > System.currentTimeMillis()) {
+                        task.setNotificationTime(time);
+                        notificationTimeButton.setText(Common
+                                .getTimeAsString(time));
+                        if (mRowId > 0) {
+                            updateTask();
+                        }
+                        setAlarm(time);
+                    } else {
+                        Log.d("RP", "onActivityResult3");
+                        // FIXME: notify user that start and date time are not
+                        // valid
                     }
-                    setAlarm(time);
                 }
             }
         }
@@ -212,9 +240,10 @@ public class TaskAddEditActivity extends Activity {
         intent.putExtra("taskName", task.getDescription());
         intent.putExtra("taskstartTime", task.getStartTime());
         intent.putExtra("taskId", task.getId());
-        
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 
-                0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        PendingIntent pendingIntent = PendingIntent
+                .getBroadcast(getApplicationContext(), 0, intent,
+                        PendingIntent.FLAG_ONE_SHOT);
         ((AlarmManager) getSystemService(ALARM_SERVICE)).set(
                 AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
 
@@ -223,10 +252,8 @@ public class TaskAddEditActivity extends Activity {
 
     private void populateOffers() {
         JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-        dbHelper.open();
         offers = dbHelper.getRecentOffersAsList();
         List<String> positions = dbHelper.getRecentOffersPositions();
-        dbHelper.close();
 
         positions.add(0, getString(R.string.none));
         String[] offerStrings = (String[]) positions
@@ -254,10 +281,7 @@ public class TaskAddEditActivity extends Activity {
 
     private void populateFields() {
         if (-1 != mRowId) {
-            JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-            dbHelper.open();
-            task = dbHelper.getTask(mRowId);
-            dbHelper.close();
+            task = JOffersDbAdapter.getInstance().getTask(mRowId);
 
             if (null != task) {
                 descriptionEdit.setText(task.getDescription());
@@ -294,8 +318,8 @@ public class TaskAddEditActivity extends Activity {
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
-        case Common.ADDING_EMPTY_TASK_DIALOG:
-            return DialogManager.getDialog(this, id, null);
+        case DialogManager.ADDING_EMPTY_TASK_DIALOG:
+            return DialogManager.getInstance().getDialog(this, id, null);
         default:
             break;
         }

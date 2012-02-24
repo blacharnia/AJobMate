@@ -28,8 +28,8 @@ public class DBOfferHandler extends TableHandler {
             + " text not null, " + KEY_EMPLOYER + " text not null, "
             + KEY_LOCATION + " text, " + KEY_DESCRIPTION + " text, "
             + KEY_LATITIUDE + " float, " + KEY_LONGITUDE + " float, "
-            + KEY_PHONE_NR + " text, " + KEY_EMAIL + " text, " 
-             + KEY_ARCHIVE + " integer" + ");";
+            + KEY_PHONE_NR + " text, " + KEY_EMAIL + " text, " + KEY_ARCHIVE
+            + " integer" + ");";
 
     public DBOfferHandler(SQLiteDatabase db) {
         mDB = db;
@@ -120,7 +120,7 @@ public class DBOfferHandler extends TableHandler {
 
         return positions;
     }
-    
+
     public List<String> getPositions() {
         List<String> positions = new ArrayList<String>();
 
@@ -156,49 +156,60 @@ public class DBOfferHandler extends TableHandler {
 
         return ids;
     }
-    
-    public boolean archive(long taskId){
+
+    public boolean archive(long taskId) {
         return setArchive(taskId, true);
     }
-    
-    public boolean unArchive(long taskId){
+
+    public boolean unArchive(long taskId) {
         return setArchive(taskId, false);
     }
-    
-    public boolean setArchive(long taskId, boolean archive){
+
+    public boolean setArchive(long taskId, boolean archive) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_ARCHIVE, archive);
-        
-        return mDB.update(TABLE_NAME, initialValues,
-                KEY_ROWID + "=" + taskId, null) > 0;
+
+        return mDB.update(TABLE_NAME, initialValues, KEY_ROWID + "=" + taskId,
+                null) > 0;
     }
-    
-    public void archiveAll(){
+
+    public void archiveAll() {
         StringBuilder query = new StringBuilder("UPDATE ");
-        query.append(TABLE_NAME)
-            .append(" SET ")
-            .append(KEY_ARCHIVE)
-            .append( " = 1 ;");
-        
+        query.append(TABLE_NAME).append(" SET ").append(KEY_ARCHIVE)
+                .append(" = 1 ;");
+
         mDB.execSQL(query.toString());
     }
 
     public boolean deleteAllRecent() {
         return mDB.delete(tableName, KEY_ARCHIVE + "= 0", null) > 0;
     }
-	
-	public boolean deleteAllArchived() {
+
+    public boolean deleteAllArchived() {
         return mDB.delete(tableName, KEY_ARCHIVE + "= 1", null) > 0;
     }
-	
-	public void unarchiveAll(){
+
+    public void unarchiveAll() {
         StringBuilder query = new StringBuilder("UPDATE ");
-        query.append(TABLE_NAME)
-            .append(" SET ")
-            .append(KEY_ARCHIVE)
-            .append( " = 0 ;");
-        
+        query.append(TABLE_NAME).append(" SET ").append(KEY_ARCHIVE)
+                .append(" = 0 ;");
+
         mDB.execSQL(query.toString());
+    }
+
+    public boolean isExists(String position, String employer) {
+        boolean ret = false;
+        String query = KEY_POSITION + "= '" + position + "' AND "
+                + KEY_EMPLOYER + " = '" + employer + "';";
+        Cursor cursor = mDB.query(true, TABLE_NAME, null, query, null, null,
+                null, null, null);
+
+        if (cursor != null) {
+            ret = cursor.getCount() > 0;
+            cursor.close();
+        }
+
+        return ret;
     }
 
 }

@@ -22,22 +22,21 @@ public class AJobMateMainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        JOffersDbAdapter.getInstance().init(getApplicationContext());
-        JOffersDbAdapter.getInstance().open();
-        
+
+        JOffersDbAdapter.getInstance().open(getApplicationContext());
+
         setContentView(R.layout.main);
         mOptionsList = (ListView) findViewById(R.id.options_list);
         mOptionsList.setAdapter(mListAdapter);
         mOptionsList.setOnItemClickListener(mItemClickListener);
     }
-    
+
     @Override
-    protected void onDestroy() {
-        if(isFinishing()){
+    protected void onPause() {
+        if (isFinishing()) {
             JOffersDbAdapter.getInstance().close();
         }
-        super.onDestroy();
+        super.onPause();
     }
 
     private OnItemClickListener mItemClickListener = new OnItemClickListener() {

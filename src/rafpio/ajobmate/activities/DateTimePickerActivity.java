@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 public class DateTimePickerActivity extends Activity {
@@ -18,6 +19,7 @@ public class DateTimePickerActivity extends Activity {
     private TimePicker timePicker;
     private Button confirmButton;
     private Button cancelButton;
+    private TextView captionTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class DateTimePickerActivity extends Activity {
         timePicker = (TimePicker) findViewById(R.id.timePicker);
         confirmButton = (Button) findViewById(R.id.confirm);
         cancelButton = (Button) findViewById(R.id.cancel);
+        captionTV = (TextView) findViewById(R.id.caption);
 
         confirmButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -35,7 +38,7 @@ public class DateTimePickerActivity extends Activity {
                 calendar.set(datePicker.getYear(), datePicker.getMonth(),
                         datePicker.getDayOfMonth(),
                         timePicker.getCurrentHour(),
-                        timePicker.getCurrentMinute());
+                        timePicker.getCurrentMinute(), 0);
 
                 Intent intent = new Intent();
                 // TODO: externalize "time"
@@ -51,6 +54,35 @@ public class DateTimePickerActivity extends Activity {
                 finish();
             }
         });
+
+        init();
     }
+
+    private void init() {
+        //
+        Bundle extras = getIntent().getExtras();
+        if (null != extras) {
+            long time = extras.getLong("time");
+            if (time != 0) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(time);
+                timePicker.setCurrentMinute(calendar.get(Calendar.MINUTE));
+                timePicker.setCurrentHour(calendar.get(Calendar.HOUR));
+                datePicker.updateDate(calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+            }
+
+            String caption = extras.getString("caption");
+            if (caption != null) {
+                captionTV.setText("Select the " + caption);
+            }
+
+        } else {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+
+    };
 
 }

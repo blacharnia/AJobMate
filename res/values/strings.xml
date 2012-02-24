@@ -54,8 +54,15 @@
 	<string name="unarchive_offer">Unarchive offer</string>
 	<string name="all_offers">All offers</string>
 	<string name="time">time</string>
+	<string name="notification_time">notification time: </string>
 	<string name="latitude">latitude</string>
 	<string name="longitude">longitude</string>
 	<string name="add_new">Add new..</string>
-
+	<string name="contact_added">Contact added</string>
+    <string name="contact_added_msg">Contact added</string>
+    <string name="contact_exists">Contact exists</string>
+    <string name="edit">Edit</string>
+    <string name="contact_exists_msg">Contact already exists on your device</string>
+    <string name="offer_exists">Offer exists</string>
+    <string name="offer_exists_msg">Offer with such position and employer already exists</string>
 </resources>

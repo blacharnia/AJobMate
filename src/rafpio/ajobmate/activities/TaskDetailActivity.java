@@ -42,7 +42,7 @@ public class TaskDetailActivity extends Activity {
         endTimeTV = (TextView) findViewById(R.id.endTimeText);
         notificationTimeTV = (TextView) findViewById(R.id.notificationTimeText);
         archiveButton = (Button) findViewById(R.id.archive);
-        
+
         offer = (TextView) findViewById(R.id.offer);
 
         editButton.setOnClickListener(mEditOnClickListener);
@@ -58,12 +58,12 @@ public class TaskDetailActivity extends Activity {
             startActivityForResult(intent, Common.ACTIVITY_EDIT);
         }
     };
-    
+
     private View.OnClickListener mArchiveOnClickListener = new OnClickListener() {
 
         public void onClick(View v) {
-        	EventHandler.getInstance().archiveTask(task.getId());
-        	finish();
+            EventHandler.getInstance().archiveTask(task.getId());
+            finish();
         }
     };
 
@@ -85,45 +85,44 @@ public class TaskDetailActivity extends Activity {
     }
 
     private void setupControls() {
-        
-            description.setText(task.getDescription());
 
-            long startTime = task.getStartTime();
-            if (startTime > 0) {
-                startTimeTV.setText("Start time:"
-                        + Common.getTimeAsString(startTime));
-            } else {
-                startTimeTV.setText("No start time provided.");
-            }
+        description.setText(task.getDescription());
 
-            long endTime = task.getEndTime();
-            if (endTime > 0) {
-                endTimeTV
-                        .setText("End time:" + Common.getTimeAsString(endTime));
-            } else {
-                endTimeTV.setText("No end time provided.");
-            }
+        long startTime = task.getStartTime();
+        if (startTime > 0) {
+            startTimeTV.setText("Start time:"
+                    + Common.getTimeAsString(startTime));
+        } else {
+            startTimeTV.setText("No start time provided.");
+        }
 
-            long notificationTime = task.getNotificationTime();
-            if (notificationTime > 0) {
-                notificationTimeTV.setText("Notification time:"
-                        + Common.getTimeAsString(notificationTime));
-            } else {
-                notificationTimeTV.setText("No notification time provided.");
-            }
+        long endTime = task.getEndTime();
+        if (endTime > 0) {
+            endTimeTV.setText("End time:" + Common.getTimeAsString(endTime));
+        } else {
+            endTimeTV.setText("No end time provided.");
+        }
 
-            String taskOffer = getOfferName(task.getOfferId());
-            if (TextUtils.isEmpty(taskOffer)) {
-                offer.setText("No related offer set.");
-            } else {
-                offer.setText("Related offer:" + taskOffer);
-            }
-            
-            long currentTime = System.currentTimeMillis();
-            
-            if(currentTime > startTime){
-                archiveButton.setVisibility(View.VISIBLE);
-            }
+        long notificationTime = task.getNotificationTime();
+        if (notificationTime > 0) {
+            notificationTimeTV.setText("Notification time:"
+                    + Common.getTimeAsString(notificationTime));
+        } else {
+            notificationTimeTV.setText("No notification time provided.");
+        }
+
+        String taskOffer = getOfferName(task.getOfferId());
+        if (TextUtils.isEmpty(taskOffer)) {
+            offer.setText("No related offer set.");
+        } else {
+            offer.setText("Related offer:" + taskOffer);
+        }
+
+        long currentTime = System.currentTimeMillis();
+
+        if (currentTime > startTime) {
+            archiveButton.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -131,36 +130,28 @@ public class TaskDetailActivity extends Activity {
         checkInputParams();
 
         if (mRowId > 0) {
-            JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-            dbHelper.open();
-            task = dbHelper.getTask(mRowId);
-            dbHelper.close();
-            if(task != null){
+            task = JOffersDbAdapter.getInstance().getTask(mRowId);
+            if (task != null) {
                 setupControls();
-            }
-            else{
+            } else {
                 finish();
             }
-        }
-        else{
+        } else {
             finish();
         }
-        
+
         super.onStart();
     }
 
     // TODO: make it common
     private String getOfferName(long offerId) {
         String offerName = null;
-        JOffersDbAdapter dbHelper = JOffersDbAdapter.getInstance();
-        dbHelper.open();
-        Offer offer = dbHelper.getOffer(offerId);
+        Offer offer = JOffersDbAdapter.getInstance().getOffer(offerId);
         if (offer != null) {
             offerName = offer.getPosition();
         } else {
             offerName = getString(R.string.none);
         }
-        dbHelper.close();
         return offerName;
     }
 

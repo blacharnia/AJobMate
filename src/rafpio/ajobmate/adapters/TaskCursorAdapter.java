@@ -35,40 +35,53 @@ public class TaskCursorAdapter extends CursorAdapter {
     private void setupItem(Context context, Cursor cursor, View view) {
 
         Resources res = context.getResources();
-        
+
         String description = cursor.getString(cursor
                 .getColumnIndex(DBTaskHandler.KEY_DESCRIPTION));
         long startTime = cursor.getLong(cursor
                 .getColumnIndex(DBTaskHandler.KEY_START_TIME));
         long endTime = cursor.getLong(cursor
                 .getColumnIndex(DBTaskHandler.KEY_END_TIME));
+        long notificationTime = cursor.getLong(cursor
+                .getColumnIndex(DBTaskHandler.KEY_NOTIFICATION_TIME));
         long offerId = cursor.getLong(cursor
-                .getColumnIndex(DBTaskHandler.KEY_OFFER_ID));       
+                .getColumnIndex(DBTaskHandler.KEY_OFFER_ID));
 
-        ((TextView) view.findViewById(R.id.description))
-                .setText(description);
+        ((TextView) view.findViewById(R.id.description)).setText(description);
 
-        //start time
-        StringBuilder startTimeText = new StringBuilder(res.getString(R.string.starttime));
+        // start time
+        StringBuilder startTimeText = new StringBuilder(
+                res.getString(R.string.starttime));
         if (startTime > 0) {
             startTimeText.append(Common.getTimeAsString(startTime));
-        }
-        else{
+        } else {
             startTimeText.append(res.getString(R.string.none));
-        }        
+        }
         ((TextView) view.findViewById(R.id.startTime)).setText(startTimeText);
-        
-        //end time
-        StringBuilder endTimeText = new StringBuilder(res.getString(R.string.endtime));
+
+        // end time
+        StringBuilder endTimeText = new StringBuilder(
+                res.getString(R.string.endtime));
         if (endTime > 0) {
             endTimeText.append(Common.getTimeAsString(endTime));
-        }
-        else{
+        } else {
             endTimeText.append(res.getString(R.string.none));
-        }        
+        }
         ((TextView) view.findViewById(R.id.endTime)).setText(endTimeText);
 
-        //offer id
+        // notification time
+        StringBuilder notificationTimeText = new StringBuilder(
+                res.getString(R.string.notification_time));
+        if (notificationTime > 0) {
+            notificationTimeText.append(Common
+                    .getTimeAsString(notificationTime));
+        } else {
+            notificationTimeText.append(res.getString(R.string.none));
+        }
+        ((TextView) view.findViewById(R.id.notificationTime))
+                .setText(notificationTimeText);
+
+        // offer id
         ((TextView) view.findViewById(R.id.offerId)).setText("offer: "
                 + getOfferPositionbyId(offerId));
     }
@@ -79,7 +92,7 @@ public class TaskCursorAdapter extends CursorAdapter {
         if (offer != null) {
             position = offer.getPosition();
         } else {
-            position = "<none>";
+            position = "none";
         }
         return position;
     }

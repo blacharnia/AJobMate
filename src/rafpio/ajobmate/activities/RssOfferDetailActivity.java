@@ -56,10 +56,7 @@ public class RssOfferDetailActivity extends Activity {
     private OnClickListener mImportClickListener = new OnClickListener() {
 
         public void onClick(View v) {
-            JOffersDbAdapter dBase = JOffersDbAdapter.getInstance();
-            dBase.open();
-            dBase.createOffer(rssOffer);
-            dBase.close();
+            JOffersDbAdapter.getInstance().createOffer(rssOffer);
             startActivityForResult(new Intent(getApplicationContext(),
                     MyOffersListActivity.class), CALL_OFFERS_LIST_FOM_IMPORT);
         }
@@ -88,11 +85,6 @@ public class RssOfferDetailActivity extends Activity {
     }
 
     private RSSMessage getRssOffer(long id) {
-        RSSMessage rssOffer = null;
-        JOffersDbAdapter dBase = JOffersDbAdapter.getInstance();
-        dBase.open();
-        rssOffer = dBase.getRssOffer(id);
-        dBase.close();
-        return rssOffer;
+        return JOffersDbAdapter.getInstance().getRssOffer(id);
     }
 }

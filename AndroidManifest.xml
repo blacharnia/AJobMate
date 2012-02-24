@@ -21,32 +21,51 @@
         android:label="@string/app_name" >
         <activity
             android:name=".activities.AJobMateMainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <receiver android:name=".core.TimeAlarmBroadcastReceiver" />
 
-        <activity android:name=".activities.DateTimePickerActivity" />
-        <activity android:name=".activities.TaskDetailActivity" />
-        <activity android:name=".activities.TaskAddEditActivity" />
-        <activity android:name=".activities.TaskListActivity" />
-        <activity android:name=".activities.TaskArchivedListActivity" />
-        <activity android:name=".activities.MyOffersListActivity" />
-        <activity android:name=".activities.MyOffersArchivedListActivity" />
-        <activity android:name=".activities.RSSOffersListActivity" />
-        <activity android:name=".activities.RssOfferDetailActivity" />
-        <activity android:name=".activities.MyOfferDetailActivity" />
-        <activity android:name=".activities.MyOfferAddEditActivity" />
-        <activity android:name=".activities.LocationMapActivity" />
-        <activity android:name=".activities.WebViewActivity" />
-        <activity android:name=".activities.HistoryActivity" />
+        <activity
+            android:name=".activities.DateTimePickerActivity"
+            android:screenOrientation="portrait" />
+            <activity android:name=".activities.TaskListActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.TaskDetailActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.TaskAddEditActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.TaskListActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.TaskDetailAddEditActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.TaskArchivedListActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.MyOffersListActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.MyOffersArchivedListActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.RSSOffersListActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.RssOfferDetailActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.MyOfferDetailActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.MyOfferAddEditActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.LocationMapActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.WebViewActivity" 
+                android:screenOrientation="portrait"/>
+            <activity android:name=".activities.HistoryActivity" 
+                android:screenOrientation="portrait"/>
 
-        <uses-library android:name="com.google.android.maps" />
+            <uses-library android:name="com.google.android.maps" />
     </application>
 
 </manifest>

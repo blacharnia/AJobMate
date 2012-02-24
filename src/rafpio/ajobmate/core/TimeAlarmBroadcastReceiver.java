@@ -19,7 +19,7 @@ public class TimeAlarmBroadcastReceiver extends BroadcastReceiver {
         String taskName = arg1.getStringExtra("taskName");
         long taskStartTime = arg1.getLongExtra("taskStartTime", 0);
         long taskId = arg1.getLongExtra("taskId", 0);
-        
+
         if (TextUtils.isEmpty(taskName)) {
             return;
         }
@@ -29,14 +29,15 @@ public class TimeAlarmBroadcastReceiver extends BroadcastReceiver {
         StringBuilder message = new StringBuilder("Task ");
         message.append(taskName);
         message.append(" pending ");
-        if(taskStartTime > 0){
+        if (taskStartTime > 0) {
             message.append("at: ");
             message.append(String.valueOf(taskStartTime));
         }
 
-        Intent startIntent = new Intent(arg0.getApplicationContext(), TaskDetailActivity.class);
+        Intent startIntent = new Intent(arg0.getApplicationContext(),
+                TaskDetailActivity.class);
         startIntent.putExtra(DBTaskHandler.KEY_ROWID, taskId);
-        
+
         PendingIntent contentIntent = PendingIntent.getActivity(arg0, 0,
                 startIntent, 0);
         Notification notif = new Notification(R.drawable.icon,

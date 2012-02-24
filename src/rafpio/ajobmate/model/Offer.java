@@ -120,11 +120,11 @@ public class Offer {
         return longitude;
     }
 
-	public void setArchive(boolean archive) {
-		this.archive = archive;
-	}
+    public void setArchive(boolean archive) {
+        this.archive = archive;
+    }
 
-	public boolean isArchive() {
-		return archive;
-	}
+    public boolean isArchive() {
+        return archive;
+    }
 }

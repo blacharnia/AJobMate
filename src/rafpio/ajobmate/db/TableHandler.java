@@ -32,13 +32,15 @@ public abstract class TableHandler {
     public Cursor getAll() {
         return mDB.query(tableName, null, null, null, null, null, null);
     }
-    
+
     public Cursor getRecent() {
-        return mDB.query(tableName, null, KEY_ARCHIVE + " = 0", null, null, null, null);
+        return mDB.query(tableName, null, KEY_ARCHIVE + " = 0", null, null,
+                null, null);
     }
-    
+
     public Cursor getArchived() {
-        return mDB.query(tableName, null, KEY_ARCHIVE + " = 1", null, null, null, null);
+        return mDB.query(tableName, null, KEY_ARCHIVE + " = 1", null, null,
+                null, null);
     }
 
     public List<Object> getAllAsList() {
@@ -59,7 +61,7 @@ public abstract class TableHandler {
         }
         return list;
     }
-    
+
     public List<Object> getRecentAsList() {
         List<Object> list = null;
         Cursor cursor = getRecent();
@@ -78,6 +80,5 @@ public abstract class TableHandler {
         }
         return list;
     }
-    
 
 }
