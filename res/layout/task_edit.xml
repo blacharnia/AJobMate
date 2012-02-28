@@ -13,6 +13,7 @@
 			<EditText android:id="@+id/description"
 				android:layout_width="fill_parent" android:layout_height="wrap_content" />
 
+			
 			<TextView android:text="Start time: press button to edit"
 				android:layout_width="fill_parent" android:layout_height="wrap_content" />
 			<Button android:id="@+id/startTime" android:layout_width="fill_parent"

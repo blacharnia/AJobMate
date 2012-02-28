@@ -1,25 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent">
-	<FrameLayout android:layout_alignParentTop="true"
-		android:id="@+id/rssoffers_layout" android:layout_above="@+id/option_panel"
-		android:layout_width="wrap_content" android:layout_height="wrap_content">
-		<ListView android:layout_height="fill_parent"
-			android:layout_width="fill_parent" android:id="@+id/rss_offers_list" />
-		<TextView android:id="@+id/empty" android:layout_width="fill_parent"
-			android:visibility="gone" android:layout_height="wrap_content"
-			android:text="@string/no_offers" />
-	</FrameLayout>
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-	<LinearLayout android:id="@+id/option_panel"
-		android:layout_above="@+id/status" android:orientation="horizontal"
-		android:layout_width="fill_parent" android:layout_height="wrap_content">
-		<Button android:id="@+id/reload" android:text="Reload..."
-			android:layout_width="wrap_content" android:layout_height="wrap_content" />
-	</LinearLayout>
+    <FrameLayout
+        android:id="@+id/rssoffers_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/option_panel"
+        android:layout_alignParentTop="true" >
 
-	<TextView android:id="@+id/status" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:layout_alignParentBottom="true"
-		android:text="status" />
+        <ListView
+            android:id="@+id/rss_offers_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_offers"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/option_panel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/status"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/reload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reload..." />
+    </LinearLayout>
 
 </RelativeLayout>

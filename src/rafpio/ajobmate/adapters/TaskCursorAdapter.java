@@ -51,7 +51,7 @@ public class TaskCursorAdapter extends CursorAdapter {
 
         // start time
         StringBuilder startTimeText = new StringBuilder(
-                res.getString(R.string.starttime));
+                res.getString(R.string.start_time));
         if (startTime > 0) {
             startTimeText.append(Common.getTimeAsString(startTime));
         } else {

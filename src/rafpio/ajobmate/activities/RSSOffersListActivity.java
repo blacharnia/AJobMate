@@ -6,7 +6,10 @@ import java.util.Observer;
 import rafpio.ajobmate.R;
 import rafpio.ajobmate.adapters.RssOfferCursorAdapter;
 import rafpio.ajobmate.core.Common;
+import rafpio.ajobmate.core.DialogManager;
 import rafpio.ajobmate.core.EventHandler;
+import rafpio.ajobmate.core.NetworkUtils;
+import rafpio.ajobmate.core.EventHandler.OpResult;
 import rafpio.ajobmate.db.DBOfferHandler;
 import rafpio.ajobmate.db.JOffersDbAdapter;
 import android.app.Activity;
@@ -43,19 +46,25 @@ public class RSSOffersListActivity extends Activity implements Observer {
     @Override
     protected void onStart() {
         super.onStart();
-        showDialog(Common.LOADING_DIALOG);
-        if (getRssOfferCnt() == 0) {
-            EventHandler.getInstance().requestRssOffers();
-        } else {
-            update(null, null);
+        if (NetworkUtils.isConnected()) {
+            showDialog(Common.LOADING_DIALOG);
+            if (getRssOfferCnt() == 0) {
+                EventHandler.getInstance().requestRssOffers();
+            } else {
+                update(null, null);
+            }
         }
     }
 
     private OnClickListener mReloadClickListener = new OnClickListener() {
 
         public void onClick(View v) {
-            showDialog(Common.LOADING_DIALOG);
-            EventHandler.getInstance().requestRssOffers();
+            if (NetworkUtils.isConnected()) {
+                showDialog(Common.LOADING_DIALOG);
+                EventHandler.getInstance().requestRssOffers();
+            } else {
+                showDialog(DialogManager.NO_NETWORK_DIALOG);
+            }
         }
     };
 
@@ -77,6 +86,8 @@ public class RSSOffersListActivity extends Activity implements Observer {
             loadingDialog.setMessage("Loading...");
             loadingDialog.setIndeterminate(true);
             return loadingDialog;
+        case DialogManager.NO_NETWORK_DIALOG:
+            return DialogManager.getInstance().getDialog(this, id, null);
         default:
             break;
         }
@@ -102,7 +113,10 @@ public class RSSOffersListActivity extends Activity implements Observer {
     };
 
     public void update(Observable observable, Object data) {
-        loadRSSOffers();
+        OpResult opResult = (OpResult) data;
+        if (opResult.status == EventHandler.RSS_OFFERS_ADDED) {
+            loadRSSOffers();
+        }
         dismissDialog(Common.LOADING_DIALOG);
     }
 

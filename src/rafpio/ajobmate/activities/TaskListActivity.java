@@ -42,7 +42,6 @@ public class TaskListActivity extends Activity implements Observer {
     private long mOfferId;
     private Button addButton;
     private Button archiveAllButton;
-    private Button deleteAllButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +60,6 @@ public class TaskListActivity extends Activity implements Observer {
 
         archiveAllButton = (Button) findViewById(R.id.archiveAll);
         archiveAllButton.setOnClickListener(archiveAllClickListener);
-
-        deleteAllButton = (Button) findViewById(R.id.deleteAll);
-        deleteAllButton.setOnClickListener(deleteAllClickListener);
     }
 
     @Override
@@ -115,7 +111,6 @@ public class TaskListActivity extends Activity implements Observer {
             }
             int cnt = cursor.getCount();
             archiveAllButton.setEnabled(cnt > 0);
-            deleteAllButton.setEnabled(cnt > 0);
         }
 
     }
@@ -124,7 +119,6 @@ public class TaskListActivity extends Activity implements Observer {
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
         menu.add(Menu.NONE, 0, 0, R.string.archive_task);
-        menu.add(Menu.NONE, 1, 0, R.string.delete_task);
     }
 
     @Override
@@ -135,8 +129,6 @@ public class TaskListActivity extends Activity implements Observer {
         int id = item.getItemId();
         if (id == 0) {
             EventHandler.getInstance().archiveTask(info.id);
-        } else if (id == 1) {
-            EventHandler.getInstance().deleteTask(info.id);
         }
         return true;
     }
@@ -152,9 +144,6 @@ public class TaskListActivity extends Activity implements Observer {
         case DialogManager.CONFIRM_ARCHIVE_ALL_TASKS_DIALOG:
             return DialogManager.getInstance().getDialog(this, id,
                     new OnConfirmArchiveDialogListener());
-        case DialogManager.CONFIRM_DELETE_ALL_RECENT_TASKS_DIALOG:
-            return DialogManager.getInstance().getDialog(this, id,
-                    new OnConfirmDeleteDialogListener());
         default:
             break;
         }
@@ -170,18 +159,6 @@ public class TaskListActivity extends Activity implements Observer {
 
         public void onNegativeResponse() {
         }
-    }
-
-    private static class OnConfirmDeleteDialogListener implements
-            CommonDialogListener {
-
-        public void onPositiveResponse() {
-            EventHandler.getInstance().deleteAllRecentTasks();
-        }
-
-        public void onNegativeResponse() {
-        }
-
     }
 
     @Override
@@ -280,10 +257,7 @@ public class TaskListActivity extends Activity implements Observer {
 
         }
 
-        public void onNothingSelected(AdapterView<?> arg0) {
-            // TODO Auto-generated method stub
-
-        }
+        public void onNothingSelected(AdapterView<?> arg0) {}
     };
 
 }

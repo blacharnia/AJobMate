@@ -209,7 +209,7 @@ public class TaskArchivedListActivity extends Activity implements Observer {
         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                 long arg3) {
             Intent intent = new Intent(TaskArchivedListActivity.this,
-                    TaskDetailActivity.class);
+                    TaskAddEditActivity.class);
             intent.putExtra(TableHandler.KEY_ROWID, arg3);
             startActivityForResult(intent, Common.ACTIVITY_EDIT);
         }

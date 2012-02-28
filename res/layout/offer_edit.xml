@@ -37,6 +37,16 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:text="Description" />
+
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:text="Phone number" />
 
             <EditText
@@ -68,6 +78,7 @@
                 android:id="@+id/gps_sublayout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" >
+
                 <TextView
                     android:id="@+id/gps_latitude_text"
                     android:layout_width="fill_parent"
@@ -106,16 +117,6 @@
                     android:layout_centerVertical="true"
                     android:text="Get \n location" />
             </RelativeLayout>
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Description" />
-
-            <EditText
-                android:id="@+id/description"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 
@@ -128,6 +129,7 @@
 
         <Button
             android:id="@+id/confirm"
+            style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/confirm" />
@@ -144,6 +146,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Press option buttons, eventually MENU hard key for actions" />
+        android:text="Press buttons for actions" />
 
 </RelativeLayout>

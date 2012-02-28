@@ -33,6 +33,10 @@ public class DialogManager {
     public static final int CONTACT_ADDED_DIALOG = 13;
     public static final int CONTACT_EXISTS_DIALOG = 14;
     public static final int OFFER_EXISTS_DIALOG = 15;
+    public static final int BAD_START_END_TIME_DIALOG = 16;
+    public static final int BAD_NOTIFICATION_TIME_DIALOG = 17;
+    public static final int PHONE_NUMBER_MISSING_DIALOG = 18;
+    public static final int NO_NETWORK_DIALOG = 19;
 
     public static DialogManager getInstance() {
         return INSTANCE;
@@ -142,6 +146,29 @@ public class DialogManager {
         case OFFER_EXISTS_DIALOG:
             dialogInfo.titleId = R.string.offer_exists;
             dialogInfo.messageId = R.string.offer_exists_msg;
+            dialogInfo.negativeButtonLabelId = R.string.ok;
+            dialogInfo.flags = NEGATIVE_BUTTON;
+        case BAD_START_END_TIME_DIALOG:
+            dialogInfo.titleId = R.string.bad_start_end_time;
+            dialogInfo.messageId = R.string.bad_start_end_time_msg;
+            dialogInfo.negativeButtonLabelId = R.string.ok;
+            dialogInfo.flags = NEGATIVE_BUTTON;
+            break;
+        case BAD_NOTIFICATION_TIME_DIALOG:
+            dialogInfo.titleId = R.string.bad_notification_time;
+            dialogInfo.messageId = R.string.bad_notification_time_msg;
+            dialogInfo.negativeButtonLabelId = R.string.ok;
+            dialogInfo.flags = NEGATIVE_BUTTON;
+            break;
+        case PHONE_NUMBER_MISSING_DIALOG:
+            dialogInfo.titleId = R.string.phone_number_missing;
+            dialogInfo.messageId = R.string.phone_number_missing_msg;
+            dialogInfo.negativeButtonLabelId = R.string.ok;
+            dialogInfo.flags = NEGATIVE_BUTTON;
+            break;
+        case NO_NETWORK_DIALOG:
+            dialogInfo.titleId = R.string.no_network;
+            dialogInfo.messageId = R.string.no_network_msg;
             dialogInfo.negativeButtonLabelId = R.string.ok;
             dialogInfo.flags = NEGATIVE_BUTTON;
             break;

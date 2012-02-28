@@ -19,7 +19,6 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -163,7 +162,7 @@ public class MyOfferAddEditActivity extends Activity implements Observer {
     }
 
     protected void updateOffer() {
-        JOffersDbAdapter.getInstance().updateOffer(offer);
+        EventHandler.getInstance().updateOffer(offer);
     }
 
     private void populateFields() {
@@ -251,13 +250,15 @@ public class MyOfferAddEditActivity extends Activity implements Observer {
         OpResult opResult = (OpResult) data;
 
         switch (opResult.status) {
+        case EventHandler.OFFER_UPDATED:
         case EventHandler.OFFER_ADDED:
             setResult(RESULT_OK);
             finish();
             break;
         case EventHandler.OFFER_NOT_ADDED:
-            // FIXME: should not occur but handle anyway
-            Log.d("RP", "update2");
+        case EventHandler.OFFER_NOT_UPDATED:
+            setResult(RESULT_CANCELED);
+            finish();
             break;
         case EventHandler.OFFER_EXISTS:
             showDialog(DialogManager.OFFER_EXISTS_DIALOG);

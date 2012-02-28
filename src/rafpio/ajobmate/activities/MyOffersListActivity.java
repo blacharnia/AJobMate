@@ -9,6 +9,7 @@ import rafpio.ajobmate.core.Common;
 import rafpio.ajobmate.core.DialogManager;
 import rafpio.ajobmate.core.DialogManager.CommonDialogListener;
 import rafpio.ajobmate.core.EventHandler;
+import rafpio.ajobmate.db.DBTaskHandler;
 import rafpio.ajobmate.db.JOffersDbAdapter;
 import rafpio.ajobmate.db.TableHandler;
 import android.app.Activity;
@@ -35,7 +36,6 @@ public class MyOffersListActivity extends Activity implements Observer {
     private OfferCursorAdapter mListAdapter;
     private Button addButton;
     private Button archiveAllButton;
-    private Button deleteAllButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +52,6 @@ public class MyOffersListActivity extends Activity implements Observer {
 
         archiveAllButton = (Button) findViewById(R.id.archiveAll);
         archiveAllButton.setOnClickListener(archiveAllClickListener);
-
-        deleteAllButton = (Button) findViewById(R.id.deleteAll);
-        deleteAllButton.setOnClickListener(deleteAllClickListener);
 
         registerForContextMenu(mOffersList);
 
@@ -80,9 +77,6 @@ public class MyOffersListActivity extends Activity implements Observer {
         case DialogManager.CONFIRM_ARCHIVE_ALL_OFFERS_DIALOG:
             return DialogManager.getInstance().getDialog(this, id,
                     new OnConfirmArchiveDialogListener());
-        case DialogManager.CONFIRM_DELETE_ALL_OFFERS_DIALOG:
-            return DialogManager.getInstance().getDialog(this, id,
-                    new OnConfirmDeleteDialogListener());
         default:
             break;
         }
@@ -107,7 +101,6 @@ public class MyOffersListActivity extends Activity implements Observer {
 
                     // TODO:consider placing it somewhere else
                     archiveAllButton.setEnabled(cursor.getCount() > 0);
-                    deleteAllButton.setEnabled(cursor.getCount() > 0);
 
                 }
             }
@@ -133,18 +126,6 @@ public class MyOffersListActivity extends Activity implements Observer {
 
     }
 
-    private static class OnConfirmDeleteDialogListener implements
-            CommonDialogListener {
-
-        public void onPositiveResponse() {
-            EventHandler.getInstance().deleteAllRecentOffers();
-        }
-
-        public void onNegativeResponse() {
-        }
-
-    }
-
     OnClickListener addClickListener = new OnClickListener() {
 
         public void onClick(View v) {
@@ -162,15 +143,6 @@ public class MyOffersListActivity extends Activity implements Observer {
         }
     };
 
-    OnClickListener deleteAllClickListener = new OnClickListener() {
-
-        public void onClick(View v) {
-            if (mListAdapter.getCount() > 0) {
-                showDialog(DialogManager.CONFIRM_DELETE_ALL_OFFERS_DIALOG);
-            }
-        }
-    };
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -181,7 +153,7 @@ public class MyOffersListActivity extends Activity implements Observer {
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
         menu.add(Menu.NONE, 0, 0, "Archive offer");
-        menu.add(Menu.NONE, 1, 0, "Delete offer");
+        menu.add(Menu.NONE, 1, 0, "Edit offer");
     }
 
     @Override
@@ -192,8 +164,12 @@ public class MyOffersListActivity extends Activity implements Observer {
         int id = item.getItemId();
         if (id == 0) {
             EventHandler.getInstance().archiveOffer(info.id);
-        } else if (id == 1) {
-            EventHandler.getInstance().deleteOffer(info.id);
+        }
+        else if (id == 1) {
+            Intent intent = new Intent(MyOffersListActivity.this,
+                    MyOfferAddEditActivity.class);
+            intent.putExtra(DBTaskHandler.KEY_ROWID, info.id);
+            startActivityForResult(intent, Common.ACTIVITY_EDIT);
         }
 
         return true;

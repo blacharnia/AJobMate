@@ -1,8 +1,9 @@
 package rafpio.ajobmate.core;
 
 import rafpio.ajobmate.R;
-import rafpio.ajobmate.activities.TaskDetailActivity;
+import rafpio.ajobmate.activities.TaskAddEditActivity;
 import rafpio.ajobmate.db.DBTaskHandler;
+import rafpio.ajobmate.db.JOffersDbAdapter;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,6 +11,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 
 public class TimeAlarmBroadcastReceiver extends BroadcastReceiver {
 
@@ -35,7 +37,9 @@ public class TimeAlarmBroadcastReceiver extends BroadcastReceiver {
         }
 
         Intent startIntent = new Intent(arg0.getApplicationContext(),
-                TaskDetailActivity.class);
+                TaskAddEditActivity.class);
+        
+        startIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startIntent.putExtra(DBTaskHandler.KEY_ROWID, taskId);
 
         PendingIntent contentIntent = PendingIntent.getActivity(arg0, 0,
@@ -46,6 +50,7 @@ public class TimeAlarmBroadcastReceiver extends BroadcastReceiver {
         notif.flags |= Notification.FLAG_AUTO_CANCEL;
         notif.setLatestEventInfo(arg0, from, message, contentIntent);
         nm.notify(1, notif);
+        JOffersDbAdapter.getInstance().open(arg0.getApplicationContext());
         EventHandler.getInstance().resetTaskNotification(taskId);
     }
 

@@ -48,7 +48,7 @@
     <string name="delete_all_tasks_confirmation">Delete all tasks?</string>
     <string name="delete_all_archived_tasks_confirmation">Delete all archived tasks?</string>
 	<string name="none">none</string>
-	<string name="starttime">start time: </string>
+	<string name="start_time">start time: </string>
 	<string name="endtime">end time: </string>
 	<string name="delete_offer">Delete offer</string>
 	<string name="unarchive_offer">Unarchive offer</string>
@@ -64,5 +64,14 @@
     <string name="edit">Edit</string>
     <string name="contact_exists_msg">Contact already exists on your device</string>
     <string name="offer_exists">Offer exists</string>
+    <string name="bad_start_end_time">Start time later than the end time</string>
+    <string name="bad_start_end_time_msg">Set the start time earlier than the end time</string>
+    <string name="bad_notification_time">Bad notification time</string>
+    <string name="bad_notification_time_msg">Set the notification time later than now</string>
     <string name="offer_exists_msg">Offer with such position and employer already exists</string>
+    <string name="phone_number_missing">Phone number is missing</string>
+    <string name="phone_number_missing_msg">You need to provide phone number to add employer to contacts</string>
+    <string name="no_network">No network connection available</string>
+    <string name="no_network_msg">Enable any of network data connections</string>
+    
 </resources>

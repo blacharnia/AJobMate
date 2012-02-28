@@ -2,8 +2,7 @@ package rafpio.ajobmate.core;
 
 public class DataContainer {
 
-    // private ArrayList<RSSMessage> mRSSMessages = new ArrayList<RSSMessage>();
-    public static final String[] OPTIONS = { "My Offers", "RssOffers", "Tasks",
+    public static final String[] OPTIONS = { "My Offers", "Online offers", "Tasks",
             "History" };
 
     private static class DataContainerHolder {

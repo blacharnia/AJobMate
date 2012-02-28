@@ -38,6 +38,11 @@ public class TaskAddEditActivity extends Activity {
     private long mRowId;
     private long mOfferId;
     private List<Object> offers;
+    boolean startEndTimeinSync;
+    private Button confirmButton;
+    public static final int START_TIME_REQUEST = 0;
+    public static final int END_TIME_REQUEST = 1;
+    public static final int NOTIFICATION_TIME_REQUEST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,7 @@ public class TaskAddEditActivity extends Activity {
 
         setContentView(R.layout.task_edit);
 
-        Button confirmButton = (Button) findViewById(R.id.confirm);
+        confirmButton = (Button) findViewById(R.id.confirm);
         Button cancelButton = (Button) findViewById(R.id.cancel);
 
         descriptionEdit = (EditText) findViewById(R.id.description);
@@ -101,9 +106,10 @@ public class TaskAddEditActivity extends Activity {
         public void onClick(View v) {
             Intent intent = new Intent(TaskAddEditActivity.this,
                     DateTimePickerActivity.class);
-            intent.putExtra("time", task.getStartTime());
-            intent.putExtra("caption", DBTaskHandler.KEY_START_TIME);
-            startActivityForResult(intent, 0);
+            intent.putExtra(DBTaskHandler.KEY_START_TIME, task.getStartTime());
+            intent.putExtra(DBTaskHandler.KEY_END_TIME, task.getEndTime());
+            intent.putExtra("request_code", START_TIME_REQUEST);
+            startActivityForResult(intent, START_TIME_REQUEST);
         }
     };
 
@@ -111,9 +117,10 @@ public class TaskAddEditActivity extends Activity {
         public void onClick(View v) {
             Intent intent = new Intent(TaskAddEditActivity.this,
                     DateTimePickerActivity.class);
-            intent.putExtra("time", task.getEndTime());
-            intent.putExtra("caption", DBTaskHandler.KEY_END_TIME);
-            startActivityForResult(intent, 1);
+            intent.putExtra(DBTaskHandler.KEY_START_TIME, task.getStartTime());
+            intent.putExtra(DBTaskHandler.KEY_END_TIME, task.getEndTime());
+            intent.putExtra("request_code", END_TIME_REQUEST);
+            startActivityForResult(intent, END_TIME_REQUEST);
         }
     };
 
@@ -121,9 +128,12 @@ public class TaskAddEditActivity extends Activity {
         public void onClick(View v) {
             Intent intent = new Intent(TaskAddEditActivity.this,
                     DateTimePickerActivity.class);
-            intent.putExtra("time", task.getNotificationTime());
-            intent.putExtra("caption", DBTaskHandler.KEY_NOTIFICATION_TIME);
-            startActivityForResult(intent, 2);
+            intent.putExtra(DBTaskHandler.KEY_START_TIME, task.getStartTime());
+            intent.putExtra(DBTaskHandler.KEY_END_TIME, task.getEndTime());
+            intent.putExtra(DBTaskHandler.KEY_NOTIFICATION_TIME,
+                    task.getNotificationTime());
+            intent.putExtra("request_code", NOTIFICATION_TIME_REQUEST);
+            startActivityForResult(intent, NOTIFICATION_TIME_REQUEST);
         }
     };
 
@@ -187,48 +197,53 @@ public class TaskAddEditActivity extends Activity {
         if (resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if (extras != null) {
-                long time = extras.getLong(getString(R.string.time));
-                if (requestCode == 0) {
+                boolean dataOK = false;
+                if (requestCode == START_TIME_REQUEST) {
+                    long startTime = extras.getLong("start_time");
                     long endTime = task.getEndTime();
-                    if (time < endTime || endTime == 0) {
-                        task.setStartTime(time);
-                        startTimeButton.setText(Common.getTimeAsString(time));
+                    if (startTime < endTime || endTime == 0) {
+                        dataOK = true;
+                        task.setStartTime(startTime);
+                        startTimeButton.setText(Common
+                                .getTimeAsString(startTime));
                         if (mRowId > 0) {
                             updateTask();
                         }
-                    } else {
-                        Log.d("RP", "onActivityResult1");
-                        // FIXME: notify user that start and date time are not
-                        // valid
                     }
-                } else if (requestCode == 1) {
-
+                } else if (requestCode == END_TIME_REQUEST) {
+                    long endTime = extras.getLong("end_time");
                     long startTime = task.getStartTime();
-                    if (time > startTime) {
-                        task.setEndTime(time);
-                        endTimeButton.setText(Common.getTimeAsString(time));
+                    if (endTime > startTime) {
+                        dataOK = true;
+                        task.setEndTime(endTime);
+                        endTimeButton.setText(Common.getTimeAsString(endTime));
                         if (mRowId > 0) {
                             updateTask();
                         }
-                    } else {
-                        Log.d("RP", "onActivityResult2");
-                        // FIXME: notify user that start and date time are not
-                        // valid
                     }
-                } else if (requestCode == 2) {
-                    if (time > System.currentTimeMillis()) {
-                        task.setNotificationTime(time);
+                } else if (requestCode == NOTIFICATION_TIME_REQUEST) {
+                    long notificationTime = extras.getLong("notification_time");
+                    if (notificationTime > System.currentTimeMillis()) {
+                        dataOK = true;
+                        task.setNotificationTime(notificationTime);
                         notificationTimeButton.setText(Common
-                                .getTimeAsString(time));
+                                .getTimeAsString(notificationTime));
                         if (mRowId > 0) {
                             updateTask();
                         }
-                        setAlarm(time);
-                    } else {
-                        Log.d("RP", "onActivityResult3");
-                        // FIXME: notify user that start and date time are not
-                        // valid
+                        setAlarm(notificationTime);
                     }
+                }
+                if (!dataOK) {
+                    
+                    if (requestCode == NOTIFICATION_TIME_REQUEST) {
+                        showDialog(DialogManager.BAD_NOTIFICATION_TIME_DIALOG);
+                    } else {
+                        confirmButton.setEnabled(false);
+                        showDialog(DialogManager.BAD_START_END_TIME_DIALOG);
+                    }
+                } else {
+                    confirmButton.setEnabled(true);
                 }
             }
         }
@@ -319,6 +334,8 @@ public class TaskAddEditActivity extends Activity {
     protected Dialog onCreateDialog(int id) {
         switch (id) {
         case DialogManager.ADDING_EMPTY_TASK_DIALOG:
+        case DialogManager.BAD_START_END_TIME_DIALOG:
+        case DialogManager.BAD_NOTIFICATION_TIME_DIALOG:
             return DialogManager.getInstance().getDialog(this, id, null);
         default:
             break;

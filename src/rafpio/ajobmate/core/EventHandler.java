@@ -32,6 +32,7 @@ public class EventHandler extends Observable {
     public static final int UNARCHIVE_TASK_CMD = 17;
     private static final int ADD_TO_CONTACTS_CMD = 19;
     private static final int ADD_OFFER_CMD = 18;
+    private static final int UPDATE_OFFER_CMD = 20;
 
     public static final int CONTACT_ADDED = 0;
     public static final int CONTACT_EXISTS = 1;
@@ -39,6 +40,11 @@ public class EventHandler extends Observable {
     public static final int OFFER_ADDED = 3;
     public static final int OFFER_NOT_ADDED = 4;
     public static final int OFFER_EXISTS = 5;
+    public static final int OFFER_UPDATED = 6;
+    public static final int OFFER_NOT_UPDATED = 7;
+    public static final int NO_NETWORK = 8;
+    public static final int RSS_OFFERS_ADDED = 9;
+    public static final int NO_RSS_OFFERS_ADDED = 10;
 
     private int command;
     private Object param;
@@ -144,6 +150,10 @@ public class EventHandler extends Observable {
                             .requestRssOffers();
                     if (rssOffers != null && !rssOffers.isEmpty()) {
                         dbHelper.addRssOffersFromList(rssOffers);
+                        outParam.status = RSS_OFFERS_ADDED;
+                    }
+                    else{
+                        outParam.status = NO_RSS_OFFERS_ADDED;
                     }
                     break;
                 case RESET_TASK_NOTIFICATION_CMD:
@@ -166,6 +176,15 @@ public class EventHandler extends Observable {
                             outParam.status = OFFER_ADDED;
                         }
                     }
+                    break;
+                case UPDATE_OFFER_CMD:
+                    boolean ret = dbHelper.updateOffer((Offer) param);
+                    if (ret) {
+                        outParam.status = OFFER_UPDATED;
+                    } else {
+                        outParam.status = OFFER_NOT_UPDATED;
+                    }
+
                     break;
                 default:
                     break;
@@ -255,6 +274,12 @@ public class EventHandler extends Observable {
 
     public void addOffer(Offer offer) {
         command = ADD_OFFER_CMD;
+        param = offer;
+        runAsyncCommand();
+    }
+
+    public void updateOffer(Offer offer) {
+        command = UPDATE_OFFER_CMD;
         param = offer;
         runAsyncCommand();
     }

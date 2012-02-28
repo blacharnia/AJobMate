@@ -105,35 +105,38 @@ public class MyOfferDetailActivity extends Activity implements Observer {
         }
     };
 
-    private void test() {
-        Intent intent = new Intent(Intent.ACTION_INSERT);
-        intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
-
-        intent.putExtra(ContactsContract.Intents.Insert.NAME,
-                "some Contact Name");
-        intent.putExtra(ContactsContract.Intents.Insert.PHONE, "12121");
-        intent.putExtra(ContactsContract.Intents.Insert.EMAIL,
-                "naoknaoknaok@gmail.com");
-
-        startActivity(intent);
-    }
-
+    /*
+     * private void test() { Intent intent = new Intent(Intent.ACTION_INSERT);
+     * intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+     * 
+     * intent.putExtra(ContactsContract.Intents.Insert.NAME,
+     * "some Contact Name");
+     * intent.putExtra(ContactsContract.Intents.Insert.PHONE, "12121");
+     * intent.putExtra(ContactsContract.Intents.Insert.EMAIL,
+     * "naoknaoknaok@gmail.com");
+     * 
+     * startActivity(intent); }
+     */
+    
     private View.OnClickListener mAddToContactsClickListener = new OnClickListener() {
 
         public void onClick(View v) {
 
-            // FIXME: request the phone number, if not present
-            Intent intent = new Intent(Intent.ACTION_INSERT);
-            intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+            if ("".equals(offer.getPhoneNr())) {
+                showDialog(DialogManager.PHONE_NUMBER_MISSING_DIALOG);
+            } else {
+                Intent intent = new Intent(Intent.ACTION_INSERT);
+                intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
 
-            intent.putExtra(ContactsContract.Intents.Insert.NAME,
-                    offer.getEmployer());
-            intent.putExtra(ContactsContract.Intents.Insert.PHONE,
-                    offer.getPhoneNr());
-            intent.putExtra(ContactsContract.Intents.Insert.EMAIL,
-                    offer.getEmail());
+                intent.putExtra(ContactsContract.Intents.Insert.NAME,
+                        offer.getEmployer());
+                intent.putExtra(ContactsContract.Intents.Insert.PHONE,
+                        offer.getPhoneNr());
+                intent.putExtra(ContactsContract.Intents.Insert.EMAIL,
+                        offer.getEmail());
 
-            startActivity(intent);
+                startActivity(intent);
+            }
         }
     };
 
@@ -276,6 +279,7 @@ public class MyOfferDetailActivity extends Activity implements Observer {
         switch (id) {
         case DialogManager.CONTACT_EXISTS_DIALOG:
         case DialogManager.CONTACT_ADDED_DIALOG:
+        case DialogManager.PHONE_NUMBER_MISSING_DIALOG:
             return DialogManager.getInstance().getDialog(this, id, null);
         }
         return super.onCreateDialog(id);

@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".core.JobmateApplication"
@@ -35,8 +36,6 @@
             android:name=".activities.DateTimePickerActivity"
             android:screenOrientation="portrait" />
             <activity android:name=".activities.TaskListActivity" 
-                android:screenOrientation="portrait"/>
-            <activity android:name=".activities.TaskDetailActivity" 
                 android:screenOrientation="portrait"/>
             <activity android:name=".activities.TaskAddEditActivity" 
                 android:screenOrientation="portrait"/>
