@@ -1,5 +1,6 @@
 package rafpio.ajobmate.model;
 
+
 public class Offer {
     private long id;
     private String position;

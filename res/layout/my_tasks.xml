@@ -21,7 +21,7 @@
 	<LinearLayout android:id="@+id/optionPanel"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
 		android:layout_above="@id/hint">
-		<Button android:id="@+id/add" android:text="Add new.."
+		<Button android:id="@+id/add" android:text="@string/add_new"
 			android:layout_width="wrap_content" android:layout_height="wrap_content" />
 		<Button android:id="@+id/archiveAll" android:layout_height="wrap_content"
 			android:text="@string/archive_all" android:layout_width="wrap_content" />
@@ -29,6 +29,6 @@
 
 	<TextView android:id="@+id/hint" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:layout_alignParentBottom="true"
-		android:text="Press or long press list items, option buttons, eventually MENU hard key for options" />
+		android:text="@string/my_tasks_hint" />
 
 </RelativeLayout>

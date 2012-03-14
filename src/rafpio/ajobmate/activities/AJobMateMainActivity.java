@@ -23,12 +23,16 @@ public class AJobMateMainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        JOffersDbAdapter.getInstance().open(getApplicationContext());
-
         setContentView(R.layout.main);
         mOptionsList = (ListView) findViewById(R.id.options_list);
         mOptionsList.setAdapter(mListAdapter);
         mOptionsList.setOnItemClickListener(mItemClickListener);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        JOffersDbAdapter.getInstance().open(getApplicationContext());
     }
 
     @Override

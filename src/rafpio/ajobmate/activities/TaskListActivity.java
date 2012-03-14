@@ -10,6 +10,7 @@ import rafpio.ajobmate.core.Common;
 import rafpio.ajobmate.core.DialogManager;
 import rafpio.ajobmate.core.DialogManager.CommonDialogListener;
 import rafpio.ajobmate.core.EventHandler;
+import rafpio.ajobmate.db.DBOfferHandler;
 import rafpio.ajobmate.db.DBTaskHandler;
 import rafpio.ajobmate.db.JOffersDbAdapter;
 import rafpio.ajobmate.db.TableHandler;
@@ -118,7 +119,8 @@ public class TaskListActivity extends Activity implements Observer {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
-        menu.add(Menu.NONE, 0, 0, R.string.archive_task);
+        menu.add(Menu.NONE, 0, 0, R.string.edit_task);
+        menu.add(Menu.NONE, 1, 0, R.string.archive_task);
     }
 
     @Override
@@ -127,7 +129,13 @@ public class TaskListActivity extends Activity implements Observer {
                 .getMenuInfo();
 
         int id = item.getItemId();
-        if (id == 0) {
+        if(id == 0){
+            Intent intent = new Intent(TaskListActivity.this,
+                    TaskAddEditActivity.class);
+            intent.putExtra(DBOfferHandler.KEY_ROWID, info.id);
+            startActivityForResult(intent, Common.ACTIVITY_EDIT);
+        }
+        else if (id == 1) {
             EventHandler.getInstance().archiveTask(info.id);
         }
         return true;
@@ -200,7 +208,7 @@ public class TaskListActivity extends Activity implements Observer {
         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                 long arg3) {
             Intent intent = new Intent(TaskListActivity.this,
-                    TaskAddEditActivity.class);
+                    TaskDetailActivity.class);
             intent.putExtra(TableHandler.KEY_ROWID, arg3);
             startActivityForResult(intent, Common.ACTIVITY_EDIT);
         }

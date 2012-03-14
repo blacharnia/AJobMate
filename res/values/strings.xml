@@ -1,25 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, AJobMateActivity!</string>
     <string name="app_name">AJobMate</string>
 	<string name="no_offers">No job offers entered</string>
 	<string name="no_tasks">No tasks entered</string>
-	<string name="menu_insert">Add offer</string>
 	<string name="confirm">Confirm</string>
-	<string name="create">Create</string>
 	<string name="cancel">Cancel</string>
 	<string name="archive">Archive</string>
 	<string name="delete">Delete</string>
-	<string name="menu_archive">Archive offer</string>
-	<string name="menu_call">Call</string>
-	<string name="show_hint">Show instructions</string>
-	<string name="send_email">Send email</string>
-	<string name="exit">Exit</string>
-	<string name="details">Details >> </string>
-	<string name="location">Location</string>
-	<string name="update">Update</string>
-	<string name="send_update">Send update</string>
-	<string name="instructions">"Instructions:\n \nPress MENU for adding new items \nClick an item to view/edit details \nLong press an item to show item - specific options."</string>
 	<string name="archive_all">Archive all</string>
 	<string name="delete_all">Delete all</string>
 	<string name="unarchive_all">Unarchive all</string>
@@ -53,25 +40,59 @@
 	<string name="delete_offer">Delete offer</string>
 	<string name="unarchive_offer">Unarchive offer</string>
 	<string name="all_offers">All offers</string>
-	<string name="time">time</string>
 	<string name="notification_time">notification time: </string>
 	<string name="latitude">latitude</string>
 	<string name="longitude">longitude</string>
 	<string name="add_new">Add new..</string>
+	<string name="add_task">Add task</string>
+	<string name="add_to_contacts">Add to contacts</string>
 	<string name="contact_added">Contact added</string>
     <string name="contact_added_msg">Contact added</string>
     <string name="contact_exists">Contact exists</string>
     <string name="edit">Edit</string>
+    <string name="edit_task">Edit task</string>
     <string name="contact_exists_msg">Contact already exists on your device</string>
     <string name="offer_exists">Offer exists</string>
     <string name="bad_start_end_time">Start time later than the end time</string>
     <string name="bad_start_end_time_msg">Set the start time earlier than the end time</string>
     <string name="bad_notification_time">Bad notification time</string>
     <string name="bad_notification_time_msg">Set the notification time later than now</string>
+    <string name="bad_time">Bad time</string>
+    <string name="bad_time_msg">Set the time later than now</string>
+   
+    
     <string name="offer_exists_msg">Offer with such position and employer already exists</string>
     <string name="phone_number_missing">Phone number is missing</string>
     <string name="phone_number_missing_msg">You need to provide phone number to add employer to contacts</string>
     <string name="no_network">No network connection available</string>
     <string name="no_network_msg">Enable any of network data connections</string>
-    
+    <string name="employer">Employer</string>
+    <string name="description">Description</string>
+    <string name="position">Position</string>
+    <string name="phone_number">Phone number</string>
+    <string name="email">Email</string>
+    <string name="location">Location</string>
+    <string name="hint_offer_edit">Press buttons for actions</string>
+    <string name="get_location">Get \n location</string>
+    <string name="reload">Reload</string>
+    <string name="my_tasks_hint">Press or long press list items, option buttons, eventually MENU hard key for options</string>
+    <string name="related_offer">Related offer</string>
+    <string name="tasks_for_this_offer">tasks for this offer</string>
+    <string name="start_time_press_button_to_edit">Set start \n and end time</string>
+    <string name="end_time_press_button_to_edit">End time: press button to edit</string>
+    <string name="notification_time_press_button_to_edit">Notification time: press button to edit</string>
+    <string name="show_tasks">Show tasks</string>
+    <string name="import_task">Import</string>
+    <string name="my_offers_hint">Press or long press list items, option buttons, eventually MENU hard key for options</string>
+    <string name="hint_my_archived_offers">Press or long press list items, option buttons, eventually MENU hard key for options</string>
+    <string name="hint_my_tasks_archived">Press or long press list items, option buttons, eventually MENU hard key for options</string>
+    <string name="edit_offer">Edit offer</string>
+    <string name="archive_offer">Archive offer</string>
+    <string name="delete_alarm">Delete alarm</string>
+    <string name="do_not_set">Do not set</string>
+    <string name="set">Set</string>
+    <string name="not_set">Not set</string>
+    <string name="set_alarm_time">Set alarm time</string>
+    <string name="set_end_time">Set end time</string>
+    <string name="set_start_time">Set start time</string>
 </resources>

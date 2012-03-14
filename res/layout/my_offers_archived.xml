@@ -24,6 +24,6 @@
 
 	<TextView android:id="@+id/hint" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:layout_alignParentBottom="true"
-		android:text="Press or long press list items, option buttons, eventually MENU hard key for options" />
+		android:text="@string/hint_my_archived_offers" />
 
 </RelativeLayout>

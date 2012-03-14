@@ -11,7 +11,7 @@ public class Common {
     public static final String PREF_FILE_NAME = "_prefs";
     public static final String PREF_VERSION = "version";
     public static final int ACTIVITY_EDIT = 1;
-    public static final String DATE_FORMAT = "yy-MM-dd:hh-mm";
+    public static final String DATE_FORMAT = "dd-MMM-yyyy hh:mm";
 
     private static final boolean SUPPORTS_GINGERBREAD = true;
 

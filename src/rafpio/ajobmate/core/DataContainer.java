@@ -1,5 +1,6 @@
 package rafpio.ajobmate.core;
 
+
 public class DataContainer {
 
     public static final String[] OPTIONS = { "My Offers", "Online offers", "Tasks",

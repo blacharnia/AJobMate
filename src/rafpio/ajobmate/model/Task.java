@@ -7,22 +7,24 @@ public class Task {
     private long endTime;
     private long notificationTime;
     private long offerId;
-    private String category;
     private boolean archive;
+    private int timeFlags;
+    public static final int FLAG_START_TIME_SET = 1;
+    public static final int FLAG_END_TIME_SET = 2;
+    public static final int FLAG_ALARM_TIME_SET = 4;
 
     public Task() {
     }
 
     public Task(long Id, String Description, long OfferId, long StartTime,
-            long EndTime, long NotificationTime, String Category,
-            boolean Archive) {
+            long EndTime, long NotificationTime, int TimeFlags, boolean Archive) {
         id = Id;
         description = Description;
         offerId = OfferId;
         startTime = StartTime;
         endTime = EndTime;
         archive = Archive;
-        category = Category;
+        setTimeFlags(TimeFlags);
         notificationTime = NotificationTime;
     }
 
@@ -66,14 +68,6 @@ public class Task {
         return offerId;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
     public void setArchive(boolean archive) {
         this.archive = archive;
     }
@@ -89,4 +83,33 @@ public class Task {
     public long getNotificationTime() {
         return notificationTime;
     }
+
+    public int getTimeFlags() {
+        return timeFlags;
+    }
+
+    public void setTimeFlags(int timeFlags) {
+        this.timeFlags = timeFlags;
+    }
+
+    public void enableFlag(int flagAlarmTimeSet) {
+        this.timeFlags |= flagAlarmTimeSet;
+    }
+
+    public void disableFlag(int flagAlarmTimeSet) {
+        this.timeFlags &= ~flagAlarmTimeSet;
+    }
+
+    public boolean isStartTimeSet() {
+        return (timeFlags & FLAG_START_TIME_SET) == FLAG_START_TIME_SET;
+    }
+
+    public boolean isEndTimeSet() {
+        return (timeFlags & FLAG_END_TIME_SET) == FLAG_END_TIME_SET;
+    }
+
+    public boolean isAlarmTimeSet() {
+        return (timeFlags & FLAG_ALARM_TIME_SET) == FLAG_ALARM_TIME_SET;
+    }
+
 }

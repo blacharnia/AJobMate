@@ -13,7 +13,7 @@ public class DBTaskHandler extends TableHandler {
     public static final String KEY_START_TIME = "startTime";
     public static final String KEY_NOTIFICATION_TIME = "notificationTime";
     public static final String KEY_END_TIME = "endTime";
-    public static final String KEY_CATEGORY = "category";
+    public static final String KEY_TIME_FLAGS = "timeFlags";
 
     protected static String TABLE_NAME = "tasks";
 
@@ -21,7 +21,7 @@ public class DBTaskHandler extends TableHandler {
             + " (" + KEY_ROWID + " integer primary key autoincrement, "
             + KEY_DESCRIPTION + " text not null, " + KEY_OFFER_ID + " int, "
             + KEY_START_TIME + " long, " + KEY_END_TIME + " long, "
-            + KEY_NOTIFICATION_TIME + " long, " + KEY_CATEGORY + " text, "
+            + KEY_NOTIFICATION_TIME + " long, " + KEY_TIME_FLAGS + " integer, "
             + KEY_ARCHIVE + " integer" + ");";
 
     public DBTaskHandler(SQLiteDatabase db) {
@@ -37,11 +37,12 @@ public class DBTaskHandler extends TableHandler {
         initialValues.put(KEY_START_TIME, task.getStartTime());
         initialValues.put(KEY_END_TIME, task.getEndTime());
         initialValues.put(KEY_NOTIFICATION_TIME, task.getNotificationTime());
-        initialValues.put(KEY_CATEGORY, task.getCategory());
+        initialValues.put(KEY_TIME_FLAGS, task.getTimeFlags());
         initialValues.put(KEY_ARCHIVE, task.isArchive());
         return mDB.insert(TABLE_NAME, null, initialValues);
     }
 
+    //TODO:getById to common?
     public Object getItem(long rowId) throws SQLException {
         Cursor cursor = mDB.query(true, TABLE_NAME, null, KEY_ROWID + "="
                 + rowId, null, null, null, null, null);
@@ -66,6 +67,7 @@ public class DBTaskHandler extends TableHandler {
         initialValues.put(KEY_START_TIME, task.getStartTime());
         initialValues.put(KEY_END_TIME, task.getEndTime());
         initialValues.put(KEY_ARCHIVE, task.isArchive());
+        initialValues.put(KEY_TIME_FLAGS, task.getTimeFlags());
         initialValues.put(KEY_NOTIFICATION_TIME, task.getNotificationTime());
         return mDB.update(TABLE_NAME, initialValues,
                 KEY_ROWID + "=" + task.getId(), null) > 0;
@@ -113,12 +115,12 @@ public class DBTaskHandler extends TableHandler {
         long endTime = cursor.getLong(cursor.getColumnIndex(KEY_END_TIME));
         long notificationTime = cursor.getLong(cursor
                 .getColumnIndex(KEY_NOTIFICATION_TIME));
-        String category = cursor.getString(cursor.getColumnIndex(KEY_CATEGORY));
-
+        int timeFlags = cursor.getInt(cursor.getColumnIndex(KEY_TIME_FLAGS));
+        
         boolean archive = cursor.getInt(cursor.getColumnIndex(KEY_ARCHIVE)) == 1 ? true
                 : false;
         return new Task(id, description, offerId, startTime, endTime,
-                notificationTime, category, archive);
+                notificationTime, timeFlags, archive);
     }
 
     public Cursor getAllForOffer(long mRowId) {

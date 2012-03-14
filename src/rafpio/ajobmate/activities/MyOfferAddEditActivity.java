@@ -19,6 +19,7 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -158,6 +159,7 @@ public class MyOfferAddEditActivity extends Activity implements Observer {
     }
 
     private void createOffer() {
+        Log.d("RP", "createOffer" + offer.getId());
         EventHandler.getInstance().addOffer(offer);
     }
 
@@ -193,6 +195,7 @@ public class MyOfferAddEditActivity extends Activity implements Observer {
 
         public void onClick(View v) {
             Location location = lastLocationFinder.getLastBestLocation(0, 0);
+            lastLocationFinder.cancel();
             if (location != null) {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
@@ -241,9 +244,13 @@ public class MyOfferAddEditActivity extends Activity implements Observer {
     };
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventHandler.getInstance().deleteObserver(this);
+    protected void onPause() {
+        super.onPause();
+        if(isFinishing()){
+            Log.d("RP", "onPause");
+
+            EventHandler.getInstance().deleteObserver(this);
+        }
     }
 
     public void update(Observable observable, Object data) {

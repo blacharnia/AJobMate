@@ -4,10 +4,13 @@ import java.util.Calendar;
 
 import rafpio.ajobmate.R;
 import rafpio.ajobmate.core.Common;
+import rafpio.ajobmate.core.DialogManager;
 import rafpio.ajobmate.db.DBTaskHandler;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -15,7 +18,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-public class DateTimePickerActivity extends Activity {
+public class TimePickerActivity extends Activity {
 
     private DatePicker datePicker;
     private TimePicker timePicker;
@@ -24,26 +27,29 @@ public class DateTimePickerActivity extends Activity {
     private long startTime;
     private long endTime;
     private long notificationTime;
-    private int requestCode;
     private TextView startTimeTV;
     private TextView endTimeTV;
+    private Button setUnSetButton;
+    private boolean setTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.date_time_layout);
+        setContentView(R.layout.set_time_layout);
 
         datePicker = (DatePicker) findViewById(R.id.datePicker);
         timePicker = (TimePicker) findViewById(R.id.timePicker);
 
         confirmButton = (Button) findViewById(R.id.confirm);
         cancelButton = (Button) findViewById(R.id.cancel);
+        setUnSetButton = (Button) findViewById(R.id.set_unset_btn);
 
         startTimeTV = (TextView) findViewById(R.id.start_time);
         endTimeTV = (TextView) findViewById(R.id.end_time);
 
         confirmButton.setOnClickListener(confirmClickListener);
         cancelButton.setOnClickListener(cancelClickListener);
+        setUnSetButton.setOnClickListener(setUnsetAlarmClickListener);
 
         init();
     }
@@ -56,6 +62,18 @@ public class DateTimePickerActivity extends Activity {
         }
     };
 
+    private OnClickListener setUnsetAlarmClickListener = new OnClickListener() {
+
+        public void onClick(View v) {
+            setTime = !setTime;
+            datePicker.setEnabled(setTime);
+            timePicker.setEnabled(setTime);
+            String label = setTime ? getString(R.string.do_not_set)
+                    : getString(R.string.set);
+            setUnSetButton.setText(label);
+        }
+    };
+
     private OnClickListener confirmClickListener = new OnClickListener() {
 
         public void onClick(View v) {
@@ -64,56 +82,80 @@ public class DateTimePickerActivity extends Activity {
                     datePicker.getDayOfMonth(), timePicker.getCurrentHour(),
                     timePicker.getCurrentMinute(), 0);
             long time = calendar.getTimeInMillis();
-            switch (requestCode) {
-            case TaskAddEditActivity.START_TIME_REQUEST:
-                startTime = time;
-                break;
-            case TaskAddEditActivity.END_TIME_REQUEST:
-                endTime = time;
-                break;
-            case TaskAddEditActivity.NOTIFICATION_TIME_REQUEST:
-                notificationTime = time;
-                break;
+
+            if (time <= System.currentTimeMillis()) {
+                showDialog(DialogManager.BAD_TIME_DIALOG);
+                return;
             }
 
             Intent intent = new Intent();
-            intent.putExtra("start_time", startTime);
-            intent.putExtra("end_time", endTime);
-            intent.putExtra("notification_time", notificationTime);
+            intent.putExtra("time_set", setTime);
+            // Log.d("RP", "onClick" + setTime);
+
+            if (setTime) {
+                String key = null;
+                switch (requestCode) {
+                case TaskAddEditActivity.START_TIME_REQUEST:
+                    key = "start_time";
+                    startTime = time;
+                    break;
+                case TaskAddEditActivity.END_TIME_REQUEST:
+                    key = "end_time";
+                    endTime = time;
+                    break;
+                case TaskAddEditActivity.ALARM_TIME_REQUEST:
+                    key = "notification_time";
+                    notificationTime = time;
+                    break;
+                default:
+                    break;
+                }
+                if (key != null) {
+                    intent.putExtra(key, time);
+                }
+            }
+
             setResult(RESULT_OK, intent);
             finish();
         }
     };
+    private int requestCode;
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        return DialogManager.getInstance().getDialog(this,
+                DialogManager.BAD_TIME_DIALOG, null);
+    }
 
     private void init() {
+        setTime = true;
         Bundle extras = getIntent().getExtras();
         if (null != extras) {
+            requestCode = extras.getInt("request_code");
             startTime = extras.getLong(DBTaskHandler.KEY_START_TIME);
             endTime = extras.getLong(DBTaskHandler.KEY_END_TIME);
             notificationTime = extras
                     .getLong(DBTaskHandler.KEY_NOTIFICATION_TIME);
+
             long time = 0;
 
-            requestCode = extras.getInt("request_code");
             switch (requestCode) {
             case TaskAddEditActivity.START_TIME_REQUEST:
-                if (startTime == 0) {
-                    startTime = System.currentTimeMillis();
-                }
                 time = startTime;
                 break;
             case TaskAddEditActivity.END_TIME_REQUEST:
-                if (endTime == 0) {
-                    endTime = System.currentTimeMillis();
-                }
                 time = endTime;
                 break;
-            case TaskAddEditActivity.NOTIFICATION_TIME_REQUEST:
-                if (notificationTime == 0) {
-                    notificationTime = System.currentTimeMillis();
-                }
+            case TaskAddEditActivity.ALARM_TIME_REQUEST:
                 time = notificationTime;
                 break;
+            default:
+                break;
+            }
+
+            setUnSetButton.setVisibility(View.VISIBLE);
+            if (time == 0) {
+                time = System.currentTimeMillis();
             }
 
             Calendar calendar = Calendar.getInstance();
@@ -128,9 +170,6 @@ public class DateTimePickerActivity extends Activity {
                     + Common.getTimeAsString(startTime));
             endTimeTV.setText("End time: " + Common.getTimeAsString(endTime));
 
-        } else {
-            setResult(RESULT_CANCELED);
-            finish();
         }
 
     };

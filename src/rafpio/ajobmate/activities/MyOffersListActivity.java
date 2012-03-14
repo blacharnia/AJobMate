@@ -98,7 +98,6 @@ public class MyOffersListActivity extends Activity implements Observer {
                     } else {
                         mListAdapter.changeCursor(cursor);
                     }
-
                     // TODO:consider placing it somewhere else
                     archiveAllButton.setEnabled(cursor.getCount() > 0);
 
@@ -152,8 +151,8 @@ public class MyOffersListActivity extends Activity implements Observer {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
-        menu.add(Menu.NONE, 0, 0, "Archive offer");
-        menu.add(Menu.NONE, 1, 0, "Edit offer");
+        menu.add(Menu.NONE, 0, 0, getString(R.string.edit_offer));
+        menu.add(Menu.NONE, 1, 0, getString(R.string.archive_offer));        
     }
 
     @Override
@@ -162,10 +161,10 @@ public class MyOffersListActivity extends Activity implements Observer {
                 .getMenuInfo();
 
         int id = item.getItemId();
-        if (id == 0) {
+        if (id == 1) {
             EventHandler.getInstance().archiveOffer(info.id);
         }
-        else if (id == 1) {
+        else if (id == 0) {
             Intent intent = new Intent(MyOffersListActivity.this,
                     MyOfferAddEditActivity.class);
             intent.putExtra(DBTaskHandler.KEY_ROWID, info.id);

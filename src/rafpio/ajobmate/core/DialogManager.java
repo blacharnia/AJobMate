@@ -34,7 +34,7 @@ public class DialogManager {
     public static final int CONTACT_EXISTS_DIALOG = 14;
     public static final int OFFER_EXISTS_DIALOG = 15;
     public static final int BAD_START_END_TIME_DIALOG = 16;
-    public static final int BAD_NOTIFICATION_TIME_DIALOG = 17;
+    public static final int BAD_TIME_DIALOG = 17;
     public static final int PHONE_NUMBER_MISSING_DIALOG = 18;
     public static final int NO_NETWORK_DIALOG = 19;
 
@@ -143,20 +143,22 @@ public class DialogManager {
             dialogInfo.messageId = R.string.contact_exists_msg;
             dialogInfo.negativeButtonLabelId = R.string.ok;
             dialogInfo.flags = NEGATIVE_BUTTON;
+            break;
         case OFFER_EXISTS_DIALOG:
             dialogInfo.titleId = R.string.offer_exists;
             dialogInfo.messageId = R.string.offer_exists_msg;
             dialogInfo.negativeButtonLabelId = R.string.ok;
             dialogInfo.flags = NEGATIVE_BUTTON;
+            break;
         case BAD_START_END_TIME_DIALOG:
             dialogInfo.titleId = R.string.bad_start_end_time;
             dialogInfo.messageId = R.string.bad_start_end_time_msg;
             dialogInfo.negativeButtonLabelId = R.string.ok;
             dialogInfo.flags = NEGATIVE_BUTTON;
             break;
-        case BAD_NOTIFICATION_TIME_DIALOG:
-            dialogInfo.titleId = R.string.bad_notification_time;
-            dialogInfo.messageId = R.string.bad_notification_time_msg;
+        case BAD_TIME_DIALOG:
+            dialogInfo.titleId = R.string.bad_time;
+            dialogInfo.messageId = R.string.bad_time_msg;
             dialogInfo.negativeButtonLabelId = R.string.ok;
             dialogInfo.flags = NEGATIVE_BUTTON;
             break;

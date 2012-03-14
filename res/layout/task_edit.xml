@@ -1,47 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent">
-	<ScrollView android:layout_width="fill_parent"
-		android:layout_alignParentTop="true" android:layout_above="@+id/option_panel"
-		android:layout_height="fill_parent">
-		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			android:orientation="vertical" android:id="@+id/form_fields"
-			android:layout_width="fill_parent" android:layout_height="wrap_content">
-			<TextView android:text="description" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-			<EditText android:id="@+id/description"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-			
-			<TextView android:text="Start time: press button to edit"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
-			<Button android:id="@+id/startTime" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/option_panel"
+        android:layout_alignParentTop="true" >
 
-			<TextView android:text="End time: press button to edit"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
-			<Button android:id="@+id/endTime" android:layout_width="fill_parent"
-				android:layout_height="fill_parent" />
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/form_fields"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-			<TextView android:text="Notification time: press button to edit"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
-			<Button android:id="@+id/notificationTime" android:layout_width="fill_parent"
-				android:layout_height="fill_parent" />
-				
-			<TextView android:text="Related offer" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-			<Spinner android:id="@+id/offer" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-		</LinearLayout>
-	</ScrollView>
-	<LinearLayout android:id="@+id/option_panel"
-		android:layout_alignParentBottom="true" android:orientation="horizontal"
-		android:layout_width="wrap_content" android:layout_height="wrap_content">
-		<Button android:id="@+id/confirm" android:text="@string/confirm"
-            android:layout_width="wrap_content" android:layout_height="wrap_content" />
-		<Button android:id="@+id/cancel" android:text="@string/cancel"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text="@string/description" />
 
-	</LinearLayout>
+            <RelativeLayout
+                android:id="@+id/startTimeSublayout"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <TextView
+                    android:text="@string/not_set"
+                    android:id="@+id/startTimeTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true" />
+
+                <Button
+                    android:id="@+id/startTimeBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/set_start_time" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/endTimeSublayout"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <TextView
+                    android:text="@string/not_set"
+                    android:id="@+id/endTimeTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true" />
+
+                <Button
+                    android:id="@+id/endTimeBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/set_end_time" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/alarmSublayout"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <TextView
+                    android:text="@string/not_set"
+                    android:id="@+id/alarmTimeTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true" />
+
+                <Button
+                    android:id="@+id/alarmTimeBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/set_alarm_time" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/related_offer" />
+
+            <Spinner
+                android:id="@+id/offer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/option_panel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel" />
+    </LinearLayout>
+
 </RelativeLayout>

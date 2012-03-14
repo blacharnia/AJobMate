@@ -3,10 +3,18 @@ package rafpio.ajobmate.core;
 import java.util.List;
 import java.util.Observable;
 
+import rafpio.ajobmate.db.DBTaskHandler;
 import rafpio.ajobmate.db.JOffersDbAdapter;
+import rafpio.ajobmate.model.Alarm;
 import rafpio.ajobmate.model.Offer;
 import rafpio.ajobmate.model.RSSMessage;
+import rafpio.ajobmate.model.Task;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class EventHandler extends Observable {
 
@@ -30,9 +38,10 @@ public class EventHandler extends Observable {
     public static final int UNARCHIVE_ALL_TASKS_CMD = 15;
     public static final int UNARCHIVE_OFFER_CMD = 16;
     public static final int UNARCHIVE_TASK_CMD = 17;
-    private static final int ADD_TO_CONTACTS_CMD = 19;
     private static final int ADD_OFFER_CMD = 18;
     private static final int UPDATE_OFFER_CMD = 20;
+    private static final int ADD_TASK_CMD = 22;
+    private static final int UPDATE_TASK_CMD = 23;
 
     public static final int CONTACT_ADDED = 0;
     public static final int CONTACT_EXISTS = 1;
@@ -45,13 +54,22 @@ public class EventHandler extends Observable {
     public static final int NO_NETWORK = 8;
     public static final int RSS_OFFERS_ADDED = 9;
     public static final int NO_RSS_OFFERS_ADDED = 10;
+    public static final int TASK_ADDED = 11;
+    public static final int TASK_NOT_ADDED = 12;
+    public static final int TASK_UPDATED = 13;
+    public static final int TASK_NOT_UPDATED = 14;
 
     private int command;
     private Object param;
     private OpResult outParam;
+    private Context appContext;
 
     public static EventHandler getInstance() {
         return INSTANCE;
+    }
+
+    public void init(Context context) {
+        appContext = context;
     }
 
     private EventHandler() {
@@ -85,7 +103,7 @@ public class EventHandler extends Observable {
         runAsyncCommand();
     }
 
-    private void runAsyncCommand() {
+    public void runAsyncCommand() {
         new AsyncTask<Void, Integer, Void>() {
 
             @Override
@@ -151,16 +169,12 @@ public class EventHandler extends Observable {
                     if (rssOffers != null && !rssOffers.isEmpty()) {
                         dbHelper.addRssOffersFromList(rssOffers);
                         outParam.status = RSS_OFFERS_ADDED;
-                    }
-                    else{
+                    } else {
                         outParam.status = NO_RSS_OFFERS_ADDED;
                     }
                     break;
                 case RESET_TASK_NOTIFICATION_CMD:
                     dbHelper.resetTaskNotification((Long) param);
-                    break;
-                case ADD_TO_CONTACTS_CMD:
-                    addToContacts(param);
                     break;
                 case ADD_OFFER_CMD:
                     Offer offer = (Offer) param;
@@ -185,6 +199,60 @@ public class EventHandler extends Observable {
                         outParam.status = OFFER_NOT_UPDATED;
                     }
 
+                    break;
+                case ADD_TASK_CMD:
+                    Task task = (Task) param;
+                    long taskId = dbHelper.createTask(task);
+                    task.setId(taskId);
+                    if (task.isAlarmTimeSet()) {
+                        Log.d("RP", "ADD_TASK_CMD:alarm set");
+                        Alarm alarm = new Alarm(0, taskId,
+                                task.getNotificationTime());
+                        dbHelper.addAlarm(alarm);
+                        setAlarm(alarm);
+                    }
+                    if (taskId == -1) {
+                        outParam.status = TASK_NOT_ADDED;
+                    } else {
+                        outParam.status = TASK_ADDED;
+                    }
+                    break;
+                case UPDATE_TASK_CMD:
+                    Task newTask = (Task) param;
+                    Task oldTask = dbHelper.getTask(newTask.getId());
+
+                    // handle alarm
+                    boolean wasAlarmSet = oldTask.isAlarmTimeSet();
+                    boolean isAlarmSet = newTask.isAlarmTimeSet();
+
+                    if (isAlarmSet) {
+                        Alarm alarm;
+                        if (wasAlarmSet) {
+                            alarm = dbHelper.getAlarmByTaskId(newTask.getId());
+                            alarm.setAlarmTime(newTask.getNotificationTime());
+                            dbHelper.updateAlarm(alarm);
+                        } else {
+                            alarm = new Alarm(0, newTask.getId(),
+                                    newTask.getNotificationTime());
+                            dbHelper.updateAlarm(alarm);
+                        }
+                        setAlarm(alarm);
+                    } else {
+                        if (wasAlarmSet) {
+                            Alarm alarm = dbHelper.getAlarmByTaskId(newTask
+                                    .getId());
+                            dbHelper.deleteAlarm(alarm.getId());
+                            cancelAlarm(alarm);
+                        }
+                    }
+
+                    boolean ret1 = dbHelper.updateTask(newTask);
+
+                    if (ret1) {
+                        outParam.status = TASK_UPDATED;
+                    } else {
+                        outParam.status = TASK_NOT_UPDATED;
+                    }
                     break;
                 default:
                     break;
@@ -265,13 +333,6 @@ public class EventHandler extends Observable {
         runAsyncCommand();
     }
 
-    // FIXME: drop this
-    public void addContact(Offer offer) {
-        command = ADD_TO_CONTACTS_CMD;
-        param = offer;
-        runAsyncCommand();
-    }
-
     public void addOffer(Offer offer) {
         command = ADD_OFFER_CMD;
         param = offer;
@@ -284,24 +345,32 @@ public class EventHandler extends Observable {
         runAsyncCommand();
     }
 
-    private void addToContacts(Object param) {
+    private void setAlarm(Alarm alarm) {
 
-        Offer offer = (Offer) param;
-        int numOfContacts = ContactHandler
-                .getNumOfContacts(offer.getEmployer());
-        switch (numOfContacts) {
-        case 1:
-            outParam.status = CONTACT_EXISTS;
-            return;
-        case 2:
-            outParam.status = MULTIPLE_CONTACTS_EXIST;
-            return;
-        default:
-            break;
-        }
+        PendingIntent pendingIntent = getAlarmPendingIntent(alarm);
+        AlarmManager alarmManager = (AlarmManager) appContext
+                .getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getAlarmTime(),
+                pendingIntent);
 
-        ContactHandler.addEmployerToContacts(offer);
-        outParam.status = CONTACT_ADDED;
+    }
+
+    private PendingIntent getAlarmPendingIntent(Alarm alarm) {
+        Intent intent = new Intent(appContext, TimeAlarmBroadcastReceiver.class);
+        intent.putExtra(DBTaskHandler.KEY_ROWID, alarm.getTaskId());
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext,
+                (int) alarm.getTaskId(), intent, PendingIntent.FLAG_ONE_SHOT
+                        | PendingIntent.FLAG_UPDATE_CURRENT);
+        return pendingIntent;
+    }
+
+    private void cancelAlarm(Alarm alarm) {
+        PendingIntent pendingIntent = getAlarmPendingIntent(alarm);
+        AlarmManager alarmManager = (AlarmManager) appContext
+                .getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
     }
 
     public class OpResult {
@@ -309,4 +378,44 @@ public class EventHandler extends Observable {
         public String description;
     }
 
+    public void addTask(Task task) {
+        command = ADD_TASK_CMD;
+        param = task;
+        runAsyncCommand();
+
+    }
+
+    public void updateTask(Task task) {
+        command = UPDATE_TASK_CMD;
+        param = task;
+        runAsyncCommand();
+    }
+
+    /*
+     * public void setAlarms() { long now = System.currentTimeMillis(); Context
+     * context = JobmateApplication.getInstance() .getApplicationContext();
+     * Intent intent = new Intent(appContext, TimeAlarmBroadcastReceiver.class);
+     * 
+     * PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, 0,
+     * intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_UPDATE_CURRENT);
+     * 
+     * PendingIntent pendingIntent2 = PendingIntent.getBroadcast(appContext, 1,
+     * intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_UPDATE_CURRENT);
+     * 
+     * PendingIntent pendingIntent3 = PendingIntent.getBroadcast(appContext, 2,
+     * intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_UPDATE_CURRENT);
+     * 
+     * AlarmManager alarmManager = (AlarmManager) context
+     * .getSystemService(Context.ALARM_SERVICE);
+     * alarmManager.cancel(pendingIntent);
+     * 
+     * alarmManager.set(AlarmManager.RTC_WAKEUP, now + 20 * 1000,
+     * pendingIntent);
+     * 
+     * alarmManager.set(AlarmManager.RTC_WAKEUP, now + 40 * 1000,
+     * pendingIntent2);
+     * 
+     * alarmManager.set(AlarmManager.RTC_WAKEUP, now + 60 * 1000,
+     * pendingIntent3); }
+     */
 }

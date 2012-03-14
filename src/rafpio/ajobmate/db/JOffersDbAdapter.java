@@ -2,6 +2,8 @@ package rafpio.ajobmate.db;
 
 import java.util.List;
 
+import rafpio.ajobmate.R;
+import rafpio.ajobmate.model.Alarm;
 import rafpio.ajobmate.model.Offer;
 import rafpio.ajobmate.model.RSSMessage;
 import rafpio.ajobmate.model.Task;
@@ -23,6 +25,7 @@ public class JOffersDbAdapter {
     private DBOfferHandler mOfferHandler;
     private DBTaskHandler mTaskHandler;
     private DBRSSOfferHandler mRSSOfferHandler;
+    private DBAlarmHandler mAlarmHandler;
 
     private static class JOffersDbAdapterHolder {
         private static final JOffersDbAdapter INSTANCE = new JOffersDbAdapter();
@@ -53,6 +56,7 @@ public class JOffersDbAdapter {
             db.execSQL(DBOfferHandler.TABLE_CREATE);
             db.execSQL(DBTaskHandler.TABLE_CREATE);
             db.execSQL(DBRSSOfferHandler.TABLE_CREATE);
+            db.execSQL(DBAlarmHandler.TABLE_CREATE);
         }
 
         @Override
@@ -62,7 +66,8 @@ public class JOffersDbAdapter {
             db.execSQL("DROP TABLE IF EXISTS " + DBOfferHandler.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + DBTaskHandler.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + DBRSSOfferHandler.TABLE_NAME);
-
+            db.execSQL("DROP TABLE IF EXISTS " + DBAlarmHandler.TABLE_NAME);
+            
             onCreate(db);
         }
     }
@@ -74,6 +79,7 @@ public class JOffersDbAdapter {
             mOfferHandler = new DBOfferHandler(mDb);
             mTaskHandler = new DBTaskHandler(mDb);
             mRSSOfferHandler = new DBRSSOfferHandler(mDb);
+            mAlarmHandler = new DBAlarmHandler(mDb);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -127,6 +133,17 @@ public class JOffersDbAdapter {
 
     public Offer getOffer(long rowId) {
         return (Offer) mOfferHandler.getItem(rowId);
+    }
+    
+    public String getOfferName(long offerId) {
+        String offerName = null;
+        Offer offer = (Offer) mOfferHandler.getItem(offerId);
+        if (offer != null) {
+            offerName = offer.getPosition();
+        } else {
+            offerName = mCtx.getString(R.string.none);
+        }
+        return offerName;
     }
 
     public RSSMessage getRssOffer(long rowId) {
@@ -269,5 +286,29 @@ public class JOffersDbAdapter {
 
     public boolean isOfferExists(String position, String employer) {
         return mOfferHandler.isExists(position, employer);
+    }
+    
+    public long addAlarm(Alarm alarm){
+        return mAlarmHandler.create(alarm);
+    }
+    
+    public boolean updateAlarm(Alarm alarm){
+        return mAlarmHandler.update(alarm);
+    }
+    
+    public void deleteAlarm(long id){
+        mAlarmHandler.delete(id);
+    }
+    
+    public Alarm getAlarmByTaskId(long taskId){
+        return (Alarm) mAlarmHandler.getByTaskId(taskId);
+    }
+    
+    public Cursor getAllAlarms(){
+        return mAlarmHandler.getAll();
+    }
+    
+    public List<Object> getAllAlarmsAsList(){
+        return mAlarmHandler.getAllAsList();
     }
 }

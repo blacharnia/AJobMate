@@ -27,7 +27,7 @@
 		android:layout_width="wrap_content" android:layout_height="wrap_content">
 		<Button android:id="@+id/edit" android:text="Edit"
 			android:layout_width="wrap_content" android:layout_height="wrap_content" />
-		<Button android:id="@+id/archive" android:text="Archive" android:visibility="gone"
+		<Button android:id="@+id/archive" android:text="Archive"
 			android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
 	</LinearLayout>

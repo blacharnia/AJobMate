@@ -1,5 +1,6 @@
 package rafpio.ajobmate.model;
 
+
 public class Notification {
     private int mMessage;
 

@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -105,19 +106,6 @@ public class MyOfferDetailActivity extends Activity implements Observer {
         }
     };
 
-    /*
-     * private void test() { Intent intent = new Intent(Intent.ACTION_INSERT);
-     * intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
-     * 
-     * intent.putExtra(ContactsContract.Intents.Insert.NAME,
-     * "some Contact Name");
-     * intent.putExtra(ContactsContract.Intents.Insert.PHONE, "12121");
-     * intent.putExtra(ContactsContract.Intents.Insert.EMAIL,
-     * "naoknaoknaok@gmail.com");
-     * 
-     * startActivity(intent); }
-     */
-    
     private View.OnClickListener mAddToContactsClickListener = new OnClickListener() {
 
         public void onClick(View v) {
@@ -177,6 +165,7 @@ public class MyOfferDetailActivity extends Activity implements Observer {
     private View.OnClickListener mLocationOnClickListener = new OnClickListener() {
 
         public void onClick(View v) {
+            Log.d("RP", "onClick");
             Intent intent = new Intent(MyOfferDetailActivity.this,
                     LocationMapActivity.class);
             intent.putExtra("longitude", offer.getLongitude());

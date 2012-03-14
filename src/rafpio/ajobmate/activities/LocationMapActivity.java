@@ -5,6 +5,7 @@ import java.util.List;
 import rafpio.ajobmate.R;
 import rafpio.ajobmate.core.LocationItemizedOverlay;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -50,7 +51,6 @@ public class LocationMapActivity extends MapActivity {
 
     @Override
     protected boolean isRouteDisplayed() {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -60,11 +60,13 @@ public class LocationMapActivity extends MapActivity {
             latitude = extras.getDouble(getString(R.string.latitude));
             longitude = extras.getDouble(getString(R.string.longitude));
             if (0L == latitude || 0 == longitude) {
+                Log.d("RP", "init1");
                 finish();
             }
             title = extras.getString("title");
             message = extras.getString("message");
         } else {
+            Log.d("RP", "init2");
             finish();
         }
     }

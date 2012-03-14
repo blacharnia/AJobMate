@@ -42,6 +42,21 @@ public abstract class TableHandler {
         return mDB.query(tableName, null, KEY_ARCHIVE + " = 1", null, null,
                 null, null);
     }
+    
+    public Object getById(long id){
+        Cursor cursor = mDB.query(true, tableName, null, KEY_ROWID + "="
+                + id, null, null, null, null, null);
+        if (cursor == null) {
+            return null;
+        } else if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            Object object = getItemFromCursor(cursor);
+            cursor.close();
+            return object;
+        } else {
+            return null;
+        }
+    }
 
     public List<Object> getAllAsList() {
         List<Object> list = null;

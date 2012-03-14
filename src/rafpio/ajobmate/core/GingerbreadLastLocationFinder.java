@@ -29,7 +29,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 
 /**
  * Optimized implementation of Last Location Finder for devices running
@@ -129,7 +128,6 @@ public class GingerbreadLastLocationFinder implements ILastLocationFinder {
             String provider = Settings.Secure.getString(
                     context.getContentResolver(),
                     Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-            Log.d("RP", provider);
             if (!TextUtils.isEmpty(provider)) {
 
                 context.registerReceiver(singleUpdateReceiver, locIntentFilter);
@@ -172,6 +170,7 @@ public class GingerbreadLastLocationFinder implements ILastLocationFinder {
      * {@inheritDoc}
      */
     public void cancel() {
+        context.unregisterReceiver(singleUpdateReceiver);
         locationManager.removeUpdates(singleUpatePI);
     }
 }
