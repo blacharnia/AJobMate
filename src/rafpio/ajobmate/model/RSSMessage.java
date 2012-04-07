@@ -1,6 +1,5 @@
 package rafpio.ajobmate.model;
 
-
 public class RSSMessage implements Comparable<RSSMessage> {
     public RSSMessage(long id, String title, String link, String date,
             String description) {

@@ -102,7 +102,7 @@
         android:id="@+id/option_panel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/hint"
         android:orientation="horizontal" >
 
         <Button
@@ -117,5 +117,7 @@
             android:layout_height="wrap_content"
             android:text="@string/cancel" />
     </LinearLayout>
-
+<TextView android:id="@+id/hint" android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:layout_alignParentBottom="true"
+        android:text="@string/hint_task_edit" />
 </RelativeLayout>

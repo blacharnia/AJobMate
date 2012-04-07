@@ -44,14 +44,11 @@ public class TaskAddEditActivity extends Activity implements Observer {
     private long mRowId;
     private long mOfferId;
     private List<Object> offers;
-    boolean startEndTimeinSync;
 
-    public static final int START_END_TIME_REQUEST = 1;
     public static final int ALARM_TIME_REQUEST = 2;
     public static final int START_TIME_REQUEST = 3;
     public static final int END_TIME_REQUEST = 4;
 
-    // FIXME: setting notifications does not work now
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,12 +81,11 @@ public class TaskAddEditActivity extends Activity implements Observer {
 
     private OnClickListener confirmButtonClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-            
-            if(task.isStartTimeSet() && task.isEndTimeSet() && 
-                    task.getStartTime() > task.getEndTime()){
+
+            if (task.isStartTimeSet() && task.isEndTimeSet()
+                    && task.getStartTime() > task.getEndTime()) {
                 showDialog(DialogManager.BAD_START_END_TIME_DIALOG);
-            }
-            else if (descriptionEdit.getText().toString().trim().equals("")) {
+            } else if (descriptionEdit.getText().toString().trim().equals("")) {
                 showDialog(DialogManager.ADDING_EMPTY_TASK_DIALOG);
             } else {
                 setupTaskObject();
@@ -169,7 +165,8 @@ public class TaskAddEditActivity extends Activity implements Observer {
         }
         if (mOfferId > 0) {
             task.setOfferId(mOfferId);
-            offerSpinner.setSelection(1 + getOfferIndexById(mOfferId));
+            offerSpinner.setSelection(1 + Common.getOfferIndexById(offers,
+                    mOfferId));
         }
 
     };
@@ -201,11 +198,9 @@ public class TaskAddEditActivity extends Activity implements Observer {
                 case START_TIME_REQUEST:
                     if (timeSet) {
                         task.enableFlag(Task.FLAG_START_TIME_SET);
-                        long startTime = extras
-                                .getLong("start_time");
+                        long startTime = extras.getLong("start_time");
                         task.setStartTime(startTime);
-                        startTimeTV.setText(Common
-                                .getTimeAsString(startTime));
+                        startTimeTV.setText(Common.getTimeAsString(startTime));
                     } else {
                         task.disableFlag(Task.FLAG_START_TIME_SET);
                         startTimeTV.setText("No start time provided");
@@ -216,8 +211,7 @@ public class TaskAddEditActivity extends Activity implements Observer {
                         task.enableFlag(Task.FLAG_END_TIME_SET);
                         long endTime = extras.getLong("end_time");
                         task.setEndTime(endTime);
-                        endTimeTV.setText(Common
-                                .getTimeAsString(endTime));
+                        endTimeTV.setText(Common.getTimeAsString(endTime));
                     } else {
                         task.disableFlag(Task.FLAG_END_TIME_SET);
                         endTimeTV.setText("No end time provided");
@@ -257,19 +251,6 @@ public class TaskAddEditActivity extends Activity implements Observer {
         offerSpinner.setAdapter(adapter);
     }
 
-    private int getOfferIndexById(long id) {
-        int ret = -1;
-        int offersCnt = offers.size();
-
-        for (int i = 0; i < offersCnt; i++) {
-            long offerId = ((Offer) offers.get(i)).getId();
-            if (id == offerId) {
-                ret = i;
-            }
-        }
-        return ret;
-    }
-
     private void populateFields() {
         if (-1 != mRowId) {
             task = JOffersDbAdapter.getInstance().getTask(mRowId);
@@ -277,29 +258,29 @@ public class TaskAddEditActivity extends Activity implements Observer {
             if (null != task) {
                 descriptionEdit.setText(task.getDescription());
 
-                if(task.isStartTimeSet()){
-                    startTimeTV.setText(Common.getTimeAsString(task.getStartTime()));
+                if (task.isStartTimeSet()) {
+                    startTimeTV.setText(Common.getTimeAsString(task
+                            .getStartTime()));
                 } else {
                     endTimeTV.setText("No start time provided");
                 }
 
                 if (task.isEndTimeSet()) {
-                    endTimeTV.setText(Common.getTimeAsString(task.getEndTime()));
+                    endTimeTV
+                            .setText(Common.getTimeAsString(task.getEndTime()));
                 } else {
                     endTimeTV.setText("No end time provided");
                 }
 
-                
                 if (task.isAlarmTimeSet()) {
-                    alarmTimeTV.setText(Common
-                            .getTimeAsString(task.getNotificationTime()));
+                    alarmTimeTV.setText(Common.getTimeAsString(task
+                            .getNotificationTime()));
                 } else {
-                    alarmTimeTV
-                            .setText("No notification time provided");
+                    alarmTimeTV.setText("No notification time provided");
                 }
 
-                offerSpinner.setSelection(1 + getOfferIndexById(task
-                        .getOfferId()));
+                offerSpinner.setSelection(1 + Common.getOfferIndexById(offers,
+                        task.getOfferId()));
             }
         }
     }

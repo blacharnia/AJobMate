@@ -1,8 +1,6 @@
 package rafpio.ajobmate.activities;
 
 import rafpio.ajobmate.R;
-import rafpio.ajobmate.core.DataContainer;
-import rafpio.ajobmate.db.JOffersDbAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,29 +16,17 @@ import android.widget.TextView;
 public class AJobMateMainActivity extends Activity {
 
     private ListView mOptionsList;
+    private String[] options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
+        options = getResources().getStringArray(R.array.options);
         mOptionsList = (ListView) findViewById(R.id.options_list);
         mOptionsList.setAdapter(mListAdapter);
         mOptionsList.setOnItemClickListener(mItemClickListener);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        JOffersDbAdapter.getInstance().open(getApplicationContext());
-    }
-
-    @Override
-    protected void onPause() {
-        if (isFinishing()) {
-            JOffersDbAdapter.getInstance().close();
-        }
-        super.onPause();
     }
 
     private OnItemClickListener mItemClickListener = new OnItemClickListener() {
@@ -84,7 +70,7 @@ public class AJobMateMainActivity extends Activity {
                 view = arg1;
             }
 
-            ((TextView) view).setText(DataContainer.OPTIONS[arg0]);
+            ((TextView) view).setText(options[arg0]);
 
             return view;
         }
@@ -98,7 +84,7 @@ public class AJobMateMainActivity extends Activity {
         }
 
         public int getCount() {
-            return DataContainer.OPTIONS.length;
+            return options.length;
         }
     };
 

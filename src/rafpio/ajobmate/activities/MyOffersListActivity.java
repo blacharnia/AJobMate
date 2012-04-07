@@ -12,6 +12,7 @@ import rafpio.ajobmate.core.EventHandler;
 import rafpio.ajobmate.db.DBTaskHandler;
 import rafpio.ajobmate.db.JOffersDbAdapter;
 import rafpio.ajobmate.db.TableHandler;
+import rafpio.ajobmate.model.Offer;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -19,6 +20,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -31,6 +34,14 @@ import android.widget.Button;
 import android.widget.ListView;
 
 public class MyOffersListActivity extends Activity implements Observer {
+
+    private static final int EDIT_OFFER = 0;
+    private static final int ARCHIVE_OFFER = 1;
+    private static final int CALL_EMPLOYER = 2;
+    private static final int SEND_EMAIL = 3;
+    private static final int SHOW_TASKS = 4;
+    private static final int ADD_TASK = 5;
+    private static final int ADD_TO_CONTACTS = 6;
 
     private ListView mOffersList;
     private OfferCursorAdapter mListAdapter;
@@ -71,12 +82,14 @@ public class MyOffersListActivity extends Activity implements Observer {
         switch (id) {
         case Common.LOADING_DIALOG:
             ProgressDialog loadingDialog = new ProgressDialog(this);
-            loadingDialog.setMessage("Loading...");
+            loadingDialog.setMessage(getString(R.string.loading));
             loadingDialog.setIndeterminate(true);
             return loadingDialog;
         case DialogManager.CONFIRM_ARCHIVE_ALL_OFFERS_DIALOG:
             return DialogManager.getInstance().getDialog(this, id,
                     new OnConfirmArchiveDialogListener());
+        case DialogManager.PHONE_NUMBER_MISSING_DIALOG:
+            return DialogManager.getInstance().getDialog(this, id, null);
         default:
             break;
         }
@@ -98,7 +111,6 @@ public class MyOffersListActivity extends Activity implements Observer {
                     } else {
                         mListAdapter.changeCursor(cursor);
                     }
-                    // TODO:consider placing it somewhere else
                     archiveAllButton.setEnabled(cursor.getCount() > 0);
 
                 }
@@ -151,24 +163,88 @@ public class MyOffersListActivity extends Activity implements Observer {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
-        menu.add(Menu.NONE, 0, 0, getString(R.string.edit_offer));
-        menu.add(Menu.NONE, 1, 0, getString(R.string.archive_offer));        
+        String[] options = getResources().getStringArray(
+                R.array.offer_context_options);
+        for (int i = 0; i < options.length; i++) {
+            menu.add(Menu.NONE, i, 0, options[i]);
+        }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
                 .getMenuInfo();
+        Offer offer;
+        Intent intent;
 
         int id = item.getItemId();
-        if (id == 1) {
-            EventHandler.getInstance().archiveOffer(info.id);
-        }
-        else if (id == 0) {
-            Intent intent = new Intent(MyOffersListActivity.this,
+        switch (id) {
+        case EDIT_OFFER:
+            intent = new Intent(MyOffersListActivity.this,
                     MyOfferAddEditActivity.class);
             intent.putExtra(DBTaskHandler.KEY_ROWID, info.id);
             startActivityForResult(intent, Common.ACTIVITY_EDIT);
+            break;
+        case ARCHIVE_OFFER:
+            EventHandler.getInstance().archiveOffer(info.id);
+            break;
+        case CALL_EMPLOYER:
+            offer = JOffersDbAdapter.getInstance().getOffer(info.id);
+            if (offer != null) {
+                String phoneNumber = offer.getPhoneNr();
+                if (!TextUtils.isEmpty(phoneNumber)) {
+                    Common.startCalling(phoneNumber, MyOffersListActivity.this);
+                }
+            }
+            break;
+        case SEND_EMAIL:
+            offer = JOffersDbAdapter.getInstance().getOffer(info.id);
+            if (offer != null) {
+                String email = offer.getEmail();
+
+                if (!TextUtils.isEmpty(email)) {
+                    Common.sendEmail(email, MyOffersListActivity.this);
+                }
+            }
+            break;
+        case SHOW_TASKS:
+            offer = JOffersDbAdapter.getInstance().getOffer(info.id);
+            if (offer != null) {
+                intent = new Intent(MyOffersListActivity.this,
+                        TaskListActivity.class);
+                intent.putExtra(DBTaskHandler.KEY_OFFER_ID, offer.getId());
+                startActivityForResult(intent, Common.ACTIVITY_EDIT);
+            }
+            break;
+        case ADD_TASK:
+            offer = JOffersDbAdapter.getInstance().getOffer(info.id);
+            if (offer != null) {
+                intent = new Intent(MyOffersListActivity.this,
+                        TaskAddEditActivity.class);
+                intent.putExtra(DBTaskHandler.KEY_OFFER_ID, offer.getId());
+                startActivityForResult(intent, Common.ACTIVITY_EDIT);
+            }
+            break;
+        case ADD_TO_CONTACTS:
+            offer = JOffersDbAdapter.getInstance().getOffer(info.id);
+            if (offer != null) {
+                if (TextUtils.isEmpty(offer.getPhoneNr())) {
+                    showDialog(DialogManager.PHONE_NUMBER_MISSING_DIALOG);
+                } else {
+                    intent = new Intent(Intent.ACTION_INSERT);
+                    intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+
+                    intent.putExtra(ContactsContract.Intents.Insert.NAME,
+                            offer.getEmployer());
+                    intent.putExtra(ContactsContract.Intents.Insert.PHONE,
+                            offer.getPhoneNr());
+                    intent.putExtra(ContactsContract.Intents.Insert.EMAIL,
+                            offer.getEmail());
+
+                    startActivity(intent);
+                }
+            }
+            break;
         }
 
         return true;
@@ -176,7 +252,6 @@ public class MyOffersListActivity extends Activity implements Observer {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO: check this
         if (resultCode == RESULT_OK) {
             loadOffers();
         }

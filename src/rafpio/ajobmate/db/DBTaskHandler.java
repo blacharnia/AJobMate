@@ -15,7 +15,7 @@ public class DBTaskHandler extends TableHandler {
     public static final String KEY_END_TIME = "endTime";
     public static final String KEY_TIME_FLAGS = "timeFlags";
 
-    protected static String TABLE_NAME = "tasks";
+    protected static final String TABLE_NAME = "tasks";
 
     public static final String TABLE_CREATE = "create table " + TABLE_NAME
             + " (" + KEY_ROWID + " integer primary key autoincrement, "
@@ -42,7 +42,7 @@ public class DBTaskHandler extends TableHandler {
         return mDB.insert(TABLE_NAME, null, initialValues);
     }
 
-    //TODO:getById to common?
+    // TODO:getById to common?
     public Object getItem(long rowId) throws SQLException {
         Cursor cursor = mDB.query(true, TABLE_NAME, null, KEY_ROWID + "="
                 + rowId, null, null, null, null, null);
@@ -116,7 +116,7 @@ public class DBTaskHandler extends TableHandler {
         long notificationTime = cursor.getLong(cursor
                 .getColumnIndex(KEY_NOTIFICATION_TIME));
         int timeFlags = cursor.getInt(cursor.getColumnIndex(KEY_TIME_FLAGS));
-        
+
         boolean archive = cursor.getInt(cursor.getColumnIndex(KEY_ARCHIVE)) == 1 ? true
                 : false;
         return new Task(id, description, offerId, startTime, endTime,
@@ -125,12 +125,18 @@ public class DBTaskHandler extends TableHandler {
 
     public Cursor getAllForOffer(long mRowId) {
         return mDB.query(tableName, null, KEY_OFFER_ID + " = " + mRowId, null,
-                null, null, null);
+                null, null, KEY_START_TIME);
     }
 
     public Cursor getRecentForOffer(long mRowId) {
         return mDB.query(tableName, null, KEY_OFFER_ID + " = " + mRowId
-                + " AND " + KEY_ARCHIVE + " = 0", null, null, null, null);
+                + " AND " + KEY_ARCHIVE + " = 0", null, null, null,
+                KEY_START_TIME);
+    }
+
+    public Cursor getAll() {
+        return mDB.query(tableName, null, null, null, null, null,
+                KEY_START_TIME);
     }
 
     public void resetNotification(long taskId) {
@@ -141,7 +147,8 @@ public class DBTaskHandler extends TableHandler {
 
     public Cursor getArchivedForOffer(long mRowId) {
         return mDB.query(tableName, null, KEY_OFFER_ID + " = " + mRowId
-                + " AND " + KEY_ARCHIVE + " = 1", null, null, null, null);
+                + " AND " + KEY_ARCHIVE + " = 1", null, null, null,
+                KEY_START_TIME);
     }
 
     public boolean deleteAllRecent() {

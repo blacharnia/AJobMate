@@ -55,7 +55,8 @@ public class OfferCursorAdapter extends CursorAdapter {
             ((TextView) view.findViewById(R.id.phoneNr))
                     .setText("No phone number provided");
         } else {
-            ((TextView) view.findViewById(R.id.phoneNr)).setText(phoneNumber);
+            ((TextView) view.findViewById(R.id.phoneNr)).setText("tel: "
+                    + phoneNumber);
         }
 
         String email = cursor.getString(cursor
@@ -64,7 +65,8 @@ public class OfferCursorAdapter extends CursorAdapter {
             ((TextView) view.findViewById(R.id.email))
                     .setText("No email provided");
         } else {
-            ((TextView) view.findViewById(R.id.email)).setText(email);
+            ((TextView) view.findViewById(R.id.email)).setText("email: "
+                    + email);
         }
     }
 }

@@ -45,7 +45,7 @@ public class DialogManager {
     private DialogManager() {
     }
 
-    class DialogInfo {
+    private static class DialogInfo {
         Context context;
         int titleId;
         int messageId;
@@ -91,10 +91,9 @@ public class DialogManager {
             dialogInfo.negativeButtonLabelId = R.string.cancel;
             dialogInfo.flags = POSITIVE_BUTTON | NEGATIVE_BUTTON;
             break;
-        case CONFIRM_DELETE_ALL_ARCHIVED_OFFERS_DIALOG:// FIXME: distinguish
-                                                       // from previous one
+        case CONFIRM_DELETE_ALL_ARCHIVED_OFFERS_DIALOG:
             dialogInfo.titleId = R.string.delete_all_offers_confirmation;
-            dialogInfo.messageId = R.string.confirm_delete_all_offers;
+            dialogInfo.messageId = R.string.confirm_delete_all_archived_offers;
             dialogInfo.positiveButtonLabelId = R.string.delete;
             dialogInfo.negativeButtonLabelId = R.string.cancel;
             dialogInfo.flags = POSITIVE_BUTTON | NEGATIVE_BUTTON;

@@ -15,8 +15,8 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 public class TaskCursorAdapter extends CursorAdapter {
-    public TaskCursorAdapter(Context context, Cursor c) {
-        super(context, c);
+    public TaskCursorAdapter(Context context, Cursor cursor) {
+        super(context, cursor);
     }
 
     @Override
@@ -35,58 +35,59 @@ public class TaskCursorAdapter extends CursorAdapter {
     private void setupItem(Context context, Cursor cursor, View view) {
         Resources res = context.getResources();
         Task task = JOffersDbAdapter.getInstance().getTaskFromCursor(cursor);
-        
-        //start time
+
+        // start time
         StringBuilder startTimeText = new StringBuilder(
                 res.getString(R.string.start_time));
 
-        if(task.isStartTimeSet()){
+        if (task.isStartTimeSet()) {
             startTimeText.append(Common.getTimeAsString(task.getStartTime()));
-        }
-        else{
+        } else {
             startTimeText.append(res.getString(R.string.none));
         }
         ((TextView) view.findViewById(R.id.startTime)).setText(startTimeText);
-        
-      //end time
+
+        // end time
         StringBuilder endTimeText = new StringBuilder(
                 res.getString(R.string.endtime));
 
-        if(task.isEndTimeSet()){
+        if (task.isEndTimeSet()) {
             endTimeText.append(Common.getTimeAsString(task.getEndTime()));
-        }
-        else{
+        } else {
             endTimeText.append(res.getString(R.string.none));
         }
         ((TextView) view.findViewById(R.id.endTime)).setText(endTimeText);
-        
-      //alarm time
+
+        // alarm time
         StringBuilder notificationTimeText = new StringBuilder(
                 res.getString(R.string.notification_time));
 
-        if(task.isAlarmTimeSet()){
-            notificationTimeText.append(Common.getTimeAsString(task.getNotificationTime()));
-        }
-        else{
+        if (task.isAlarmTimeSet()) {
+            notificationTimeText.append(Common.getTimeAsString(task
+                    .getNotificationTime()));
+        } else {
             notificationTimeText.append(res.getString(R.string.none));
         }
-        ((TextView) view.findViewById(R.id.notificationTime)).setText(notificationTimeText);
-        
-        //description
-        ((TextView) view.findViewById(R.id.description)).setText(task.getDescription());
+        ((TextView) view.findViewById(R.id.notificationTime))
+                .setText(notificationTimeText);
+
+        // description
+        ((TextView) view.findViewById(R.id.description)).setText(task
+                .getDescription());
 
         // offer id
         ((TextView) view.findViewById(R.id.offerId)).setText("offer: "
                 + getOfferPositionbyId(task.getOfferId()));
     }
 
-    private String getOfferPositionbyId(long id) {
+    private String getOfferPositionbyId(long offerId) {
         String position;
-        Offer offer = JOffersDbAdapter.getInstance().getOffer(id);
-        if (offer != null) {
-            position = offer.getPosition();
-        } else {
+        Offer offer = JOffersDbAdapter.getInstance().getOffer(offerId);
+        if (offer == null) {
             position = "none";
+
+        } else {
+            position = offer.getPosition();
         }
         return position;
     }

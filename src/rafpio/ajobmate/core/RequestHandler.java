@@ -1,12 +1,9 @@
 package rafpio.ajobmate.core;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,46 +26,7 @@ public class RequestHandler {
     private static final int CONNECTION_TIMEOUT = 10000;
     public static final String UPDATE_URL = "http://jjobm8.appspot.com/jjobm8";
 
-    public static InputStream requestFullUpdate() {
-        InputStream is = null;
-        try {
-            is = setupHTTPConnection(UPDATE_URL + "?action=getFullUpdate");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return is;
-    }
-
-    public static InputStream requestInitServerUpdate() {
-        InputStream is = null;
-        try {
-            is = setupHTTPConnection(UPDATE_URL + "?action=initServerUpdate");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return is;
-    }
-
-    public static DataOutputStream sendServerUpdate() {
-        DataOutputStream out = null;
-        URL servleturl;
-        try {
-            servleturl = new URL(UPDATE_URL);
-
-            URLConnection servletconnection = servleturl.openConnection();
-            servletconnection.setDoInput(true);
-            servletconnection.setDoOutput(true);
-            servletconnection.setUseCaches(false);
-            servletconnection.setDefaultUseCaches(false);
-            out = new DataOutputStream(servletconnection.getOutputStream());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return out;
-    }
-
-    public static InputStream setupHTTPConnection(String url)
+    private static InputStream setupHTTPConnection(String url)
             throws IOException {
 
         if (!URLUtil.isValidUrl(url)) {
@@ -86,17 +44,6 @@ public class RequestHandler {
         HttpClient client = new DefaultHttpClient();
         HttpResponse response = client.execute(request);
         return response.getEntity().getContent();
-    }
-
-    public static InputStream requestCurrentVersion() {
-        InputStream is = null;
-        try {
-            is = setupHTTPConnection(UPDATE_URL + "?action=getCurrentVersion");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return is;
     }
 
     public static List<RSSMessage> requestRssOffers() {

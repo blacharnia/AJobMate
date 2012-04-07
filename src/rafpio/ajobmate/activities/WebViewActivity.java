@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
 
+//FIXME: add web page to the employer
 public class WebViewActivity extends Activity {
 
     @Override

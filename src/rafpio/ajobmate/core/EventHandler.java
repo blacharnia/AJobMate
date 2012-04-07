@@ -3,7 +3,6 @@ package rafpio.ajobmate.core;
 import java.util.List;
 import java.util.Observable;
 
-import rafpio.ajobmate.db.DBTaskHandler;
 import rafpio.ajobmate.db.JOffersDbAdapter;
 import rafpio.ajobmate.model.Alarm;
 import rafpio.ajobmate.model.Offer;
@@ -12,9 +11,7 @@ import rafpio.ajobmate.model.Task;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 
 public class EventHandler extends Observable {
 
@@ -51,7 +48,6 @@ public class EventHandler extends Observable {
     public static final int OFFER_EXISTS = 5;
     public static final int OFFER_UPDATED = 6;
     public static final int OFFER_NOT_UPDATED = 7;
-    public static final int NO_NETWORK = 8;
     public static final int RSS_OFFERS_ADDED = 9;
     public static final int NO_RSS_OFFERS_ADDED = 10;
     public static final int TASK_ADDED = 11;
@@ -166,11 +162,11 @@ public class EventHandler extends Observable {
                     dbHelper.deleteAllRssOffers();
                     List<RSSMessage> rssOffers = RequestHandler
                             .requestRssOffers();
-                    if (rssOffers != null && !rssOffers.isEmpty()) {
+                    if (rssOffers == null || rssOffers.isEmpty()) {
+                        outParam.status = NO_RSS_OFFERS_ADDED;
+                    } else {
                         dbHelper.addRssOffersFromList(rssOffers);
                         outParam.status = RSS_OFFERS_ADDED;
-                    } else {
-                        outParam.status = NO_RSS_OFFERS_ADDED;
                     }
                     break;
                 case RESET_TASK_NOTIFICATION_CMD:
@@ -205,11 +201,12 @@ public class EventHandler extends Observable {
                     long taskId = dbHelper.createTask(task);
                     task.setId(taskId);
                     if (task.isAlarmTimeSet()) {
-                        Log.d("RP", "ADD_TASK_CMD:alarm set");
                         Alarm alarm = new Alarm(0, taskId,
                                 task.getNotificationTime());
-                        dbHelper.addAlarm(alarm);
-                        setAlarm(alarm);
+                        if (alarm != null) {
+                            dbHelper.addAlarm(alarm);
+                            Common.setDeviceAlarm(alarm, appContext);
+                        }
                     }
                     if (taskId == -1) {
                         outParam.status = TASK_NOT_ADDED;
@@ -229,14 +226,28 @@ public class EventHandler extends Observable {
                         Alarm alarm;
                         if (wasAlarmSet) {
                             alarm = dbHelper.getAlarmByTaskId(newTask.getId());
-                            alarm.setAlarmTime(newTask.getNotificationTime());
-                            dbHelper.updateAlarm(alarm);
+                            if (alarm == null) {// there should be an alarm but
+                                                // there is not
+                                alarm = new Alarm(0, newTask.getId(),
+                                        newTask.getNotificationTime());
+                                if (alarm != null) {
+                                    dbHelper.addAlarm(alarm);
+                                }
+                            }
+                            if (alarm != null) {
+                                alarm.setAlarmTime(newTask
+                                        .getNotificationTime());
+                                dbHelper.updateAlarm(alarm);
+                            }
+
                         } else {
                             alarm = new Alarm(0, newTask.getId(),
                                     newTask.getNotificationTime());
-                            dbHelper.updateAlarm(alarm);
+                            if (alarm != null) {
+                                dbHelper.addAlarm(alarm);
+                            }
                         }
-                        setAlarm(alarm);
+                        Common.setDeviceAlarm(alarm, appContext);
                     } else {
                         if (wasAlarmSet) {
                             Alarm alarm = dbHelper.getAlarmByTaskId(newTask
@@ -263,22 +274,6 @@ public class EventHandler extends Observable {
         }.execute();
     }
 
-    public void resetTaskNotification(long taskId) {
-        command = RESET_TASK_NOTIFICATION_CMD;
-        param = taskId;
-        runAsyncCommand();
-    }
-
-    public void deleteAllOffers() {
-        command = DELETE_ALL_OFFERS_CMD;
-        runAsyncCommand();
-    }
-
-    public void deleteAllTasks() {
-        command = DELETE_ALL_TASKS_CMD;
-        runAsyncCommand();
-    }
-
     public void deleteOffer(long id) {
         command = DELETE_OFFER_CMD;
         param = id;
@@ -291,18 +286,8 @@ public class EventHandler extends Observable {
         runAsyncCommand();
     }
 
-    public void deleteAllRecentOffers() {
-        command = DELETE_ALL_RECENT_OFFERS_CMD;
-        runAsyncCommand();
-    }
-
     public void deleteAllArchivedOffers() {
         command = DELETE_ALL_ARCHIVED_OFFERS_CMD;
-        runAsyncCommand();
-    }
-
-    public void deleteAllRecentTasks() {
-        command = DELETE_ALL_RECENT_TASKS_CMD;
         runAsyncCommand();
     }
 
@@ -345,29 +330,9 @@ public class EventHandler extends Observable {
         runAsyncCommand();
     }
 
-    private void setAlarm(Alarm alarm) {
-
-        PendingIntent pendingIntent = getAlarmPendingIntent(alarm);
-        AlarmManager alarmManager = (AlarmManager) appContext
-                .getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarm.getAlarmTime(),
-                pendingIntent);
-
-    }
-
-    private PendingIntent getAlarmPendingIntent(Alarm alarm) {
-        Intent intent = new Intent(appContext, TimeAlarmBroadcastReceiver.class);
-        intent.putExtra(DBTaskHandler.KEY_ROWID, alarm.getTaskId());
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext,
-                (int) alarm.getTaskId(), intent, PendingIntent.FLAG_ONE_SHOT
-                        | PendingIntent.FLAG_UPDATE_CURRENT);
-        return pendingIntent;
-    }
-
     private void cancelAlarm(Alarm alarm) {
-        PendingIntent pendingIntent = getAlarmPendingIntent(alarm);
+        PendingIntent pendingIntent = Common.getAlarmPendingIntent(alarm,
+                appContext);
         AlarmManager alarmManager = (AlarmManager) appContext
                 .getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);

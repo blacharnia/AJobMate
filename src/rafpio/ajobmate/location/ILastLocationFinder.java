@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package rafpio.ajobmate.core;
+package rafpio.ajobmate.location;
 
 import android.location.Location;
 import android.location.LocationListener;

@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
@@ -37,6 +38,12 @@ public class TaskDetailActivity extends Activity implements Observer {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.task_detail);
+
+        getWindow().addFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                        | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
         Button editButton = (Button) findViewById(R.id.edit);
 
@@ -98,7 +105,8 @@ public class TaskDetailActivity extends Activity implements Observer {
         }
 
         if (task.isEndTimeSet()) {
-            endTimeTV.setText("End time:" + Common.getTimeAsString(task.getEndTime()));
+            endTimeTV.setText("End time:"
+                    + Common.getTimeAsString(task.getEndTime()));
         } else {
             endTimeTV.setText("No end time provided");
         }

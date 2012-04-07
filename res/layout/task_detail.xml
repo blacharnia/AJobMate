@@ -25,9 +25,9 @@
 	<LinearLayout android:id="@+id/option_panel"
 		android:layout_alignParentBottom="true" android:orientation="horizontal"
 		android:layout_width="wrap_content" android:layout_height="wrap_content">
-		<Button android:id="@+id/edit" android:text="Edit"
+		<Button android:id="@+id/edit" android:text="@string/edit"
 			android:layout_width="wrap_content" android:layout_height="wrap_content" />
-		<Button android:id="@+id/archive" android:text="Archive"
+		<Button android:id="@+id/archive" android:text="@string/archive"
 			android:layout_width="wrap_content" android:layout_height="wrap_content" />
 
 	</LinearLayout>

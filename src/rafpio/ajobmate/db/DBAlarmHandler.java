@@ -9,19 +9,18 @@ public class DBAlarmHandler extends TableHandler {
 
     public static final String KEY_TASK_ID = "task_id";
     public static final String KEY_ALARM_TIME = "alarm_time";
-    
-    protected static String TABLE_NAME = "alarms";
-    
+
+    protected static final String TABLE_NAME = "alarms";
+
     public static final String TABLE_CREATE = "create table " + TABLE_NAME
             + " (" + KEY_ROWID + " integer primary key autoincrement, "
-            + KEY_TASK_ID + " long, "
-            + KEY_ALARM_TIME + " long" + ");";
-    
+            + KEY_TASK_ID + " long, " + KEY_ALARM_TIME + " long" + ");";
+
     public DBAlarmHandler(SQLiteDatabase db) {
         mDB = db;
         tableName = TABLE_NAME;
     }
-    
+
     @Override
     public long create(Object object) {
         Alarm alarm = (Alarm) object;
@@ -53,8 +52,8 @@ public class DBAlarmHandler extends TableHandler {
         long time = cursor.getLong(cursor.getColumnIndex(KEY_ALARM_TIME));
         return new Alarm(id, taskId, time);
     }
-    
-    public Alarm getByTaskId(long id){
+
+    public Alarm getByTaskId(long id) {
         Cursor cursor = mDB.query(true, TABLE_NAME, null, KEY_TASK_ID + "="
                 + id, null, null, null, null, null);
         if (cursor == null) {

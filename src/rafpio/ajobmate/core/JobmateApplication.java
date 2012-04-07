@@ -1,6 +1,8 @@
 package rafpio.ajobmate.core;
 
+import rafpio.ajobmate.db.JOffersDbAdapter;
 import android.app.Application;
+import android.content.Context;
 
 public class JobmateApplication extends Application {
 
@@ -12,10 +14,12 @@ public class JobmateApplication extends Application {
 
     @Override
     public void onCreate() {
-        appInstance = this;
         super.onCreate();
-        
-        EventHandler.getInstance().init(getApplicationContext());
+
+        appInstance = this;
+        Context appContext = getApplicationContext();
+        EventHandler.getInstance().init(appContext);
+        JOffersDbAdapter.getInstance().open(appContext);
     }
 
 }

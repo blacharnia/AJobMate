@@ -67,7 +67,7 @@ public class JOffersDbAdapter {
             db.execSQL("DROP TABLE IF EXISTS " + DBTaskHandler.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + DBRSSOfferHandler.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + DBAlarmHandler.TABLE_NAME);
-            
+
             onCreate(db);
         }
     }
@@ -134,7 +134,7 @@ public class JOffersDbAdapter {
     public Offer getOffer(long rowId) {
         return (Offer) mOfferHandler.getItem(rowId);
     }
-    
+
     public String getOfferName(long offerId) {
         String offerName = null;
         Offer offer = (Offer) mOfferHandler.getItem(offerId);
@@ -192,10 +192,6 @@ public class JOffersDbAdapter {
 
     public List<String> getOffersPositions() {
         return mOfferHandler.getPositions();
-    }
-
-    public Cursor getAllTasksForOffer(long mRowId) {
-        return mTaskHandler.getAllForOffer(mRowId);
     }
 
     public Cursor getRecentTasksForOffer(long mRowId) {
@@ -284,31 +280,35 @@ public class JOffersDbAdapter {
         return (Task) mTaskHandler.getItemFromCursor(cursor);
     }
 
+    public Alarm getAlarmFromCursor(Cursor cursor) {
+        return (Alarm) mAlarmHandler.getItemFromCursor(cursor);
+    }
+
     public boolean isOfferExists(String position, String employer) {
         return mOfferHandler.isExists(position, employer);
     }
-    
-    public long addAlarm(Alarm alarm){
+
+    public long addAlarm(Alarm alarm) {
         return mAlarmHandler.create(alarm);
     }
-    
-    public boolean updateAlarm(Alarm alarm){
+
+    public boolean updateAlarm(Alarm alarm) {
         return mAlarmHandler.update(alarm);
     }
-    
-    public void deleteAlarm(long id){
+
+    public void deleteAlarm(long id) {
         mAlarmHandler.delete(id);
     }
-    
-    public Alarm getAlarmByTaskId(long taskId){
+
+    public Alarm getAlarmByTaskId(long taskId) {
         return (Alarm) mAlarmHandler.getByTaskId(taskId);
     }
-    
-    public Cursor getAllAlarms(){
+
+    public Cursor getAllAlarms() {
         return mAlarmHandler.getAll();
     }
-    
-    public List<Object> getAllAlarmsAsList(){
+
+    public List<Object> getAllAlarmsAsList() {
         return mAlarmHandler.getAllAsList();
     }
 }

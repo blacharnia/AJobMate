@@ -1,6 +1,5 @@
 package rafpio.ajobmate.model;
 
-
 public class Alarm {
     private long id;
     private long taskId;

@@ -8,9 +8,9 @@ import rafpio.ajobmate.core.Common;
 import rafpio.ajobmate.core.DialogManager;
 import rafpio.ajobmate.core.EventHandler;
 import rafpio.ajobmate.core.EventHandler.OpResult;
-import rafpio.ajobmate.core.ILastLocationFinder;
 import rafpio.ajobmate.db.DBOfferHandler;
 import rafpio.ajobmate.db.JOffersDbAdapter;
+import rafpio.ajobmate.location.ILastLocationFinder;
 import rafpio.ajobmate.model.Offer;
 import android.app.Activity;
 import android.app.Dialog;
@@ -35,9 +35,11 @@ public class MyOfferAddEditActivity extends Activity implements Observer {
     private EditText mLatitudeText;
     private EditText mLongitudeText;
     private EditText mDescriptionText;
+    private Button moreLessInfoBtn;
     private long mRowId;
     private Offer offer;
     private ILastLocationFinder lastLocationFinder;
+    private boolean isVerboseMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,9 @@ public class MyOfferAddEditActivity extends Activity implements Observer {
 
         Button confirmButton = (Button) findViewById(R.id.confirm);
         Button cancelButton = (Button) findViewById(R.id.cancel);
+        moreLessInfoBtn = (Button) findViewById(R.id.more_less_info);
+        moreLessInfoBtn.setOnClickListener(mOnMoreLessInfoClickListener);
+
         mPositionText = (EditText) findViewById(R.id.position);
         mEmployerText = (EditText) findViewById(R.id.employer);
         mLocationText = (EditText) findViewById(R.id.location);
@@ -93,6 +98,21 @@ public class MyOfferAddEditActivity extends Activity implements Observer {
 
     }
 
+    private View.OnClickListener mOnMoreLessInfoClickListener = new OnClickListener() {
+
+        public void onClick(View v) {
+            isVerboseMode = !isVerboseMode;
+            if (isVerboseMode) {
+                findViewById(R.id.verbose_panel).setVisibility(View.VISIBLE);
+                moreLessInfoBtn.setText(getString(R.string.less_info));
+            } else {
+                findViewById(R.id.verbose_panel).setVisibility(View.GONE);
+                moreLessInfoBtn.setText(getString(R.string.more_info));
+            }
+
+        }
+    };
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -118,6 +138,8 @@ public class MyOfferAddEditActivity extends Activity implements Observer {
     }
 
     private void init() {
+
+        isVerboseMode = true;
         Bundle extras = getIntent().getExtras();
         if (null != extras) {
             mRowId = extras.getLong(DBOfferHandler.KEY_ROWID);
@@ -159,7 +181,6 @@ public class MyOfferAddEditActivity extends Activity implements Observer {
     }
 
     private void createOffer() {
-        Log.d("RP", "createOffer" + offer.getId());
         EventHandler.getInstance().addOffer(offer);
     }
 
@@ -246,9 +267,7 @@ public class MyOfferAddEditActivity extends Activity implements Observer {
     @Override
     protected void onPause() {
         super.onPause();
-        if(isFinishing()){
-            Log.d("RP", "onPause");
-
+        if (isFinishing()) {
             EventHandler.getInstance().deleteObserver(this);
         }
     }

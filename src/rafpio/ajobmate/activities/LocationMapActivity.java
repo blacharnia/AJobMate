@@ -18,7 +18,7 @@ public class LocationMapActivity extends MapActivity {
 
     MapView mapView;
     MapController mc;
-    GeoPoint p;
+    GeoPoint point;
     double latitude;
     double longitude;
     String title;
@@ -37,14 +37,17 @@ public class LocationMapActivity extends MapActivity {
         mapView.setBuiltInZoomControls(true);
 
         mc = mapView.getController();
-        p = new GeoPoint((int) (latitude * 1E6), (int) (longitude * 1E6));
-        mc.animateTo(p);
+
+        point = new GeoPoint((int) (latitude * 1E6), (int) (longitude * 1E6));
+        mc.setZoom(20);
+        mc.setCenter(point);
+        mc.animateTo(point);
 
         List<Overlay> mapOverlays = mapView.getOverlays();
         LocationItemizedOverlay itemizedoverlay = new LocationItemizedOverlay(
                 getResources().getDrawable(R.drawable.androidmarker), this);
 
-        OverlayItem overlayitem = new OverlayItem(p, title, message);
+        OverlayItem overlayitem = new OverlayItem(point, title, message);
         itemizedoverlay.addOverlay(overlayitem);
         mapOverlays.add(itemizedoverlay);
     }
@@ -60,13 +63,11 @@ public class LocationMapActivity extends MapActivity {
             latitude = extras.getDouble(getString(R.string.latitude));
             longitude = extras.getDouble(getString(R.string.longitude));
             if (0L == latitude || 0 == longitude) {
-                Log.d("RP", "init1");
                 finish();
             }
             title = extras.getString("title");
             message = extras.getString("message");
         } else {
-            Log.d("RP", "init2");
             finish();
         }
     }

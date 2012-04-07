@@ -81,7 +81,8 @@ public class TaskListActivity extends Activity implements Observer {
         if (null != extras) {
             mOfferId = extras.getLong(DBTaskHandler.KEY_OFFER_ID);
             if (mOfferId > 0) {
-                offerSpinner.setSelection(1 + getOfferIndexById(mOfferId));
+                offerSpinner.setSelection(1 + Common.getOfferIndexById(offers,
+                        mOfferId));
             }
         }
     }
@@ -129,13 +130,12 @@ public class TaskListActivity extends Activity implements Observer {
                 .getMenuInfo();
 
         int id = item.getItemId();
-        if(id == 0){
+        if (id == 0) {
             Intent intent = new Intent(TaskListActivity.this,
                     TaskAddEditActivity.class);
             intent.putExtra(DBOfferHandler.KEY_ROWID, info.id);
             startActivityForResult(intent, Common.ACTIVITY_EDIT);
-        }
-        else if (id == 1) {
+        } else if (id == 1) {
             EventHandler.getInstance().archiveTask(info.id);
         }
         return true;
@@ -194,15 +194,6 @@ public class TaskListActivity extends Activity implements Observer {
         }
     };
 
-    OnClickListener deleteAllClickListener = new OnClickListener() {
-
-        public void onClick(View v) {
-            if (mListAdapter.getCount() > 0) {
-                showDialog(DialogManager.CONFIRM_DELETE_ALL_RECENT_TASKS_DIALOG);
-            }
-        }
-    };
-
     private OnItemClickListener mItemListener = new OnItemClickListener() {
 
         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -224,7 +215,7 @@ public class TaskListActivity extends Activity implements Observer {
         offers = JOffersDbAdapter.getInstance().getRecentOffersAsList();
         List<String> positions = dbHelper.getRecentOffersPositions();
 
-        positions.add(0, "All offers");
+        positions.add(0, getString(R.string.all_offers));
         String[] offerStrings = (String[]) positions
                 .toArray(new String[positions.size()]);
 
@@ -233,19 +224,6 @@ public class TaskListActivity extends Activity implements Observer {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         offerSpinner.setAdapter(adapter);
-    }
-
-    private int getOfferIndexById(long id) {
-        int ret = -1;
-        int offersCnt = offers.size();
-
-        for (int i = 0; i < offersCnt; i++) {
-            long offerId = ((Offer) offers.get(i)).getId();
-            if (id == offerId) {
-                ret = i;
-            }
-        }
-        return ret;
     }
 
     private OnItemSelectedListener mSpinnerSelectedListener = new OnItemSelectedListener() {
@@ -265,7 +243,8 @@ public class TaskListActivity extends Activity implements Observer {
 
         }
 
-        public void onNothingSelected(AdapterView<?> arg0) {}
+        public void onNothingSelected(AdapterView<?> arg0) {
+        }
     };
 
 }

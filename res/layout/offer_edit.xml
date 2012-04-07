@@ -7,7 +7,8 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/option_panel"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:fadeScrollbars="false" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -21,9 +22,9 @@
 
             <EditText
                 android:id="@+id/position"
-                android:inputType="text"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="text" />
 
             <TextView
                 android:layout_width="fill_parent"
@@ -32,9 +33,9 @@
 
             <EditText
                 android:id="@+id/employer"
-                android:inputType="text"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="text" />
 
             <TextView
                 android:layout_width="fill_parent"
@@ -43,88 +44,95 @@
 
             <EditText
                 android:id="@+id/description"
-                android:inputType="text"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/phone_number" />
+                android:inputType="text" />
 
-            <EditText
-                android:id="@+id/phone_nr"
-                android:inputType="number"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
+            <LinearLayout
+                android:id="@+id/verbose_panel"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/email" />
-
-            <EditText
-                android:id="@+id/email"
-                android:inputType="textEmailAddress"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/location" />
-
-            <EditText
-                android:inputType="text"
-                android:id="@+id/location"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-
-            <RelativeLayout
-                android:id="@+id/gps_sublayout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/gps_latitude_text"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_toLeftOf="@id/gps_location"
-                    android:text="@string/latitude" />
+                    android:text="@string/phone_number" />
 
                 <EditText
-                    android:id="@+id/latitude"
-                    android:inputType="numberSigned"
+                    android:id="@+id/phone_nr"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/gps_latitude_text"
-                    android:layout_toLeftOf="@id/gps_location" />
+                    android:inputType="number" />
 
                 <TextView
-                    android:id="@+id/gps_longitude_text"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/latitude"
-                    android:layout_toLeftOf="@id/gps_location"
-                    android:text="@string/longitude" />
+                    android:text="@string/email" />
 
                 <EditText
-                    android:id="@+id/longitude"
-                    android:inputType="numberSigned"
+                    android:id="@+id/email"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/gps_longitude_text"
-                    android:layout_toLeftOf="@id/gps_location" />
+                    android:inputType="textEmailAddress" />
 
-                <Button
-                    android:id="@+id/gps_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/get_location" />
-            </RelativeLayout>
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/location" />
+
+                <EditText
+                    android:id="@+id/location"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+
+                <RelativeLayout
+                    android:id="@+id/gps_sublayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/gps_latitude_text"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toLeftOf="@id/gps_location"
+                        android:text="@string/latitude" />
+
+                    <EditText
+                        android:id="@+id/latitude"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/gps_latitude_text"
+                        android:layout_toLeftOf="@id/gps_location"
+                        android:inputType="numberSigned" />
+
+                    <TextView
+                        android:id="@+id/gps_longitude_text"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/latitude"
+                        android:layout_toLeftOf="@id/gps_location"
+                        android:text="@string/longitude" />
+
+                    <EditText
+                        android:id="@+id/longitude"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/gps_longitude_text"
+                        android:layout_toLeftOf="@id/gps_location"
+                        android:inputType="numberSigned" />
+
+                    <Button
+                        android:id="@+id/gps_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/get_location" />
+                </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
@@ -146,6 +154,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/more_less_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/less_info" />
     </LinearLayout>
 
     <TextView

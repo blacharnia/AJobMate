@@ -51,7 +51,8 @@ public class RSSOffersListActivity extends Activity implements Observer {
             if (getRssOfferCnt() == 0) {
                 EventHandler.getInstance().requestRssOffers();
             } else {
-                update(null, null);
+                loadRSSOffers();
+                dismissDialog(Common.LOADING_DIALOG);
             }
         }
     }

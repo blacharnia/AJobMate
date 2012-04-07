@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 public abstract class TableHandler {
-    public static String KEY_ROWID = "_id";
+    public static final String KEY_ROWID = "_id";
     public static final String KEY_ARCHIVE = "archive";
     String tableName;
     protected SQLiteDatabase mDB;
@@ -42,10 +42,10 @@ public abstract class TableHandler {
         return mDB.query(tableName, null, KEY_ARCHIVE + " = 1", null, null,
                 null, null);
     }
-    
-    public Object getById(long id){
-        Cursor cursor = mDB.query(true, tableName, null, KEY_ROWID + "="
-                + id, null, null, null, null, null);
+
+    public Object getById(long id) {
+        Cursor cursor = mDB.query(true, tableName, null, KEY_ROWID + "=" + id,
+                null, null, null, null, null);
         if (cursor == null) {
             return null;
         } else if (cursor.getCount() > 0) {

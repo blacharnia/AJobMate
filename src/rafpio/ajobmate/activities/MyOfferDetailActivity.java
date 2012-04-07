@@ -16,7 +16,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Html;
@@ -58,7 +57,7 @@ public class MyOfferDetailActivity extends Activity implements Observer {
         mEmailButton = (Button) findViewById(R.id.email);
         mPhoneNrButton = (Button) findViewById(R.id.phone_nr);
         mShowTasks = (Button) findViewById(R.id.show_tasks);
-        mShowTasks.setOnClickListener(mShowTasksTasksOnClickListener);
+        mShowTasks.setOnClickListener(mShowTasksOnClickListener);
         mTasksMessage = (TextView) findViewById(R.id.tasks_message);
         mDescriptionText = (TextView) findViewById(R.id.description);
         mPhoneNrButton.setOnClickListener(mPhoneNrOnClickListener);
@@ -110,7 +109,7 @@ public class MyOfferDetailActivity extends Activity implements Observer {
 
         public void onClick(View v) {
 
-            if ("".equals(offer.getPhoneNr())) {
+            if (TextUtils.isEmpty(offer.getPhoneNr())) {
                 showDialog(DialogManager.PHONE_NUMBER_MISSING_DIALOG);
             } else {
                 Intent intent = new Intent(Intent.ACTION_INSERT);
@@ -131,9 +130,9 @@ public class MyOfferDetailActivity extends Activity implements Observer {
     private View.OnClickListener mPhoneNrOnClickListener = new OnClickListener() {
 
         public void onClick(View v) {
-            if (!TextUtils.isEmpty(offer.getPhoneNr())) {
-                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:"
-                        + offer.getPhoneNr())));
+            String phoneNumber = offer.getPhoneNr();
+            if (!TextUtils.isEmpty(phoneNumber)) {
+                Common.startCalling(phoneNumber, MyOfferDetailActivity.this);
             }
         }
     };
@@ -165,7 +164,6 @@ public class MyOfferDetailActivity extends Activity implements Observer {
     private View.OnClickListener mLocationOnClickListener = new OnClickListener() {
 
         public void onClick(View v) {
-            Log.d("RP", "onClick");
             Intent intent = new Intent(MyOfferDetailActivity.this,
                     LocationMapActivity.class);
             intent.putExtra("longitude", offer.getLongitude());
@@ -253,7 +251,7 @@ public class MyOfferDetailActivity extends Activity implements Observer {
         mShowTasks.setEnabled(cnt > 0);
     }
 
-    private View.OnClickListener mShowTasksTasksOnClickListener = new OnClickListener() {
+    private View.OnClickListener mShowTasksOnClickListener = new OnClickListener() {
 
         public void onClick(View v) {
             Intent intent = new Intent(MyOfferDetailActivity.this,
