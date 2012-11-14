@@ -5,7 +5,6 @@ import java.util.List;
 import rafpio.ajobmate.R;
 import rafpio.ajobmate.core.LocationItemizedOverlay;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;

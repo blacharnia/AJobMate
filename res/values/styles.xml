@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="ButtonStyle">
-        <item name="android:background">#FF0000</item>             
+        <item name="android:background">#FF0000</item>
+    </style>
+    <style name="NoFadeScrollBars">
+        <item name="android:fadeScrollbars">false</item>        
     </style>
     
 </resources>
