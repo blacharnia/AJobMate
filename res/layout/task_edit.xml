@@ -29,12 +29,12 @@
                 android:layout_height="fill_parent" >
 
                 <TextView
-                    android:text="@string/not_set"
                     android:id="@+id/startTimeTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"
+                    android:text="@string/start_time_not_provided" />
 
                 <Button
                     android:id="@+id/startTimeBtn"
@@ -50,12 +50,12 @@
                 android:layout_height="fill_parent" >
 
                 <TextView
-                    android:text="@string/not_set"
                     android:id="@+id/endTimeTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"
+                    android:text="@string/end_time_not_provided" />
 
                 <Button
                     android:id="@+id/endTimeBtn"
@@ -71,12 +71,12 @@
                 android:layout_height="fill_parent" >
 
                 <TextView
-                    android:text="@string/not_set"
                     android:id="@+id/alarmTimeTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"
+                    android:text="@string/notification_time_not_provided" />
 
                 <Button
                     android:id="@+id/alarmTimeBtn"
@@ -85,6 +85,15 @@
                     android:layout_alignParentRight="true"
                     android:text="@string/set_alarm_time" />
             </RelativeLayout>
+
+            <Button
+                android:id="@+id/addToCal"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="right"
+                android:text="@string/add_to_calendar" >
+            </Button>
 
             <TextView
                 android:layout_width="fill_parent"
@@ -117,7 +126,12 @@
             android:layout_height="wrap_content"
             android:text="@string/cancel" />
     </LinearLayout>
-<TextView android:id="@+id/hint" android:layout_width="fill_parent"
-        android:layout_height="wrap_content" android:layout_alignParentBottom="true"
+
+    <TextView
+        android:id="@+id/hint"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:text="@string/hint_task_edit" />
+
 </RelativeLayout>

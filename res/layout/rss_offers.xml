@@ -21,13 +21,13 @@
             android:layout_height="wrap_content"
             android:text="@string/no_offers"
             android:visibility="gone" />
-    </FrameLayout>
+</FrameLayout>
 
     <LinearLayout
         android:id="@+id/option_panel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/status"
+        
         android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
 
