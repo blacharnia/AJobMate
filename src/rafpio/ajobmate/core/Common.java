@@ -26,7 +26,11 @@ public class Common {
     private static final boolean SUPPORTS_GINGERBREAD = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD;
 
     public static String getTimeAsString(long timeInMilis) {
-	return (String) DateFormat.format(DATE_FORMAT, timeInMilis);
+	if (timeInMilis == 0) {
+	    return "Date unknown";
+	} else {
+	    return (String) DateFormat.format(DATE_FORMAT, timeInMilis);
+	}
     }
 
     public static void sendEmail(String email, Context context) {

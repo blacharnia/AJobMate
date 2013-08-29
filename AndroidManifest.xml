@@ -4,7 +4,9 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="16"/>
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="16" />
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,12 +16,12 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:theme="@style/NoFadeScrollBars"
-        android:name=".core.JobmateApplication"
+        android:name="rafpio.ajobmate.core.JobmateApplication"
         android:icon="@drawable/icon"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:theme="@style/NoFadeScrollBars" >
         <activity
-            android:name=".activities.AJobMateMainActivity"
+            android:name="rafpio.ajobmate.activities.AJobMateMainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -29,14 +31,17 @@
             </intent-filter>
         </activity>
 
-        <receiver android:exported="false" android:name=".core.TimeAlarmBroadcastReceiver" >
+        <receiver
+            android:name="rafpio.ajobmate.core.TimeAlarmBroadcastReceiver"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="rafpio.jobmate.ALARM" >
                 </action>
             </intent-filter>
-            </receiver>
-        <receiver android:exported="false" android:name=".core.BootCompletedBoadcastReceiver" >
-            
+        </receiver>
+        <receiver
+            android:name="rafpio.ajobmate.core.BootCompletedBoadcastReceiver"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" >
                 </action>
@@ -44,61 +49,66 @@
         </receiver>
 
         <activity
-            android:name=".activities.DateTimePickerActivity"
+            android:name="rafpio.ajobmate.activities.DateTimePickerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.TimePickerActivity"
+            android:name="rafpio.ajobmate.activities.TimePickerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.StartEndTimePickerActivity"
+            android:name="rafpio.ajobmate.activities.StartEndTimePickerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.AlarmTimePickerActivity"
+            android:name="rafpio.ajobmate.activities.AlarmTimePickerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.TaskListActivity"
+            android:name="rafpio.ajobmate.activities.TaskListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.TaskAddEditActivity"
+            android:name="rafpio.ajobmate.activities.TaskAddEditActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.TaskAlarmActivity"
+            android:name="rafpio.ajobmate.activities.TaskAlarmActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.TaskDetailActivity"
+            android:name="rafpio.ajobmate.activities.TaskDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.TaskArchivedListActivity"
+            android:name="rafpio.ajobmate.activities.TaskArchivedListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.MyOffersListActivity"
+            android:name="rafpio.ajobmate.activities.MyOffersListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.MyOffersArchivedListActivity"
+            android:name="rafpio.ajobmate.activities.MyOffersArchivedListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.RSSOffersListActivity"
+            android:name="rafpio.ajobmate.activities.RSSOffersListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.RssOfferDetailActivity"
+            android:name="rafpio.ajobmate.activities.RssOfferDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.MyOfferDetailActivity"
+            android:name="rafpio.ajobmate.activities.MyOfferDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.MyOfferAddEditActivity"
+            android:name="rafpio.ajobmate.activities.MyOfferAddEditActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.LocationMapActivity"
+            android:name="rafpio.ajobmate.activities.LocationMapActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.WebViewActivity"
+            android:name="rafpio.ajobmate.activities.WebViewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.HistoryActivity"
+            android:name="rafpio.ajobmate.activities.HistoryActivity"
             android:screenOrientation="portrait" />
 
         <uses-library android:name="com.google.android.maps" />
+
+        <activity
+            android:name="rafpio.ajobmate.activities.CalendarActivity"
+            android:label="@string/title_activity_calendar" >
+        </activity>
     </application>
 
 </manifest>
