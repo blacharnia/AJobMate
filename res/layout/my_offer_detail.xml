@@ -1,63 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-	<ScrollView android:layout_width="fill_parent" android:id="@+id/offer_details"
-		android:layout_above="@+id/tasksLayout" android:layout_alignParentTop="true"
-		android:layout_height="wrap_content">
-		<LinearLayout android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:orientation="vertical">
+    <ScrollView
+        android:id="@+id/offer_details"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tasksLayout"
+        android:layout_alignParentTop="true" >
 
-			<TextView android:id="@+id/position" android:gravity="center"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/small_margin"
+            android:orientation="vertical" >
 
-			<TextView android:id="@+id/employer" android:gravity="center"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/position"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextLargeHeader" />
 
-			<Button android:id="@+id/phone_nr" android:gravity="center"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/employer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextNormal"/>
 
-			<Button android:id="@+id/email" android:layout_width="fill_parent"
-				android:gravity="center" android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/phone_nr"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                style="@style/NormalButton" />
 
-			<TextView android:id="@+id/location" android:gravity="center"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/email"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                style="@style/NormalButton"/>
 
-			<Button android:id="@+id/gps_location" android:gravity="center"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextNormal" />
 
-			<TextView android:id="@+id/description" android:gravity="center"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/gps_location"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                style="@style/NormalButton"/>
 
-		</LinearLayout>
-	</ScrollView>
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextNormal" />
+        </LinearLayout>
+    </ScrollView>
 
-	<LinearLayout android:layout_height="wrap_content" android:background="#0000ff"
-		android:layout_above="@+id/option_panel" android:id="@+id/tasksLayout"
-		android:layout_width="fill_parent">
-		<TextView android:id="@+id/tasks_message"  android:layout_gravity="center_vertical" android:layout_weight="1"
-			android:layout_width="0dip" android:layout_height="wrap_content"
-			android:text="@string/tasks_for_this_offer" />
+    <LinearLayout
+        android:id="@+id/tasksLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/small_margin"
+        android:background="@color/option_panel_bg"
+        android:layout_alignParentBottom="true" >
 
-		<Button
-		    android:id="@+id/show_tasks"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_gravity="right"
-		    android:text="@string/show_tasks" />
+        <Button
+            android:id="@+id/show_tasks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/normal_margin"
+            style="@style/NormalButton"
+            android:text="@string/show_tasks" />
 
-	</LinearLayout>
+        <Button
+            android:id="@+id/addTaskBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/normal_margin"
+            style="@style/NormalButton"
+            android:text="@string/add_task" />
+        <Button
+            android:id="@+id/editBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/normal_margin"
+            style="@style/NormalButton"
+            android:text="@string/edit" />
+    </LinearLayout>
 
-	<LinearLayout android:id="@+id/option_panel" android:background="#00ff00"
-		android:layout_alignParentBottom="true" android:orientation="horizontal"
-		android:layout_width="fill_parent" android:layout_height="wrap_content">
-		<Button android:id="@+id/editBtn" android:text="@string/edit"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" />
-		<Button android:id="@+id/addTaskBtn" android:text="@string/add_task"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" />
-		<Button android:id="@+id/addToContactsBtn" android:text="@string/add_to_contacts"
-            android:layout_width="wrap_content" android:layout_height="wrap_content" />
-	</LinearLayout>
+    
 
 </RelativeLayout>

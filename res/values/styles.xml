@@ -1,10 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="ButtonStyle">
-        <item name="android:background">#FF0000</item>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
     </style>
-    <style name="NoFadeScrollBars">
-        <item name="android:fadeScrollbars">false</item>        
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <item name="android:fadeScrollbars">false</item>
+        <item name="android:background">@color/bg</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
     
+    <style name="SpinnerItem">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@color/button_bg</item>
+    </style>
+
+    <style name="TextBase">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="TextLarge" parent="TextBase">
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+    </style>
+
+    <style name="TextLargeHeader" parent="TextLarge">
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextNormal" parent="TextBase">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+    <style name="TextSmall" parent="TextBase">
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+    </style>
+
+    <style name="NormalButton" parent="android:Widget.Button">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:background">@drawable/button_selector</item>
+        <item name="android:minWidth">64dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:padding">@dimen/normal_margin</item>
+    </style>
+
 </resources>

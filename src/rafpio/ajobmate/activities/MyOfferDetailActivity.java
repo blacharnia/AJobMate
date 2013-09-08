@@ -34,7 +34,7 @@ public class MyOfferDetailActivity extends Activity implements Observer {
     private Button mGPSLocationButton;
     private TextView mDescriptionText;
 
-    private TextView mTasksMessage;
+    //private TextView mTasksMessage;
     private Button mShowTasks;
     private Button mAddToContacts;
 
@@ -57,13 +57,13 @@ public class MyOfferDetailActivity extends Activity implements Observer {
         mPhoneNrButton = (Button) findViewById(R.id.phone_nr);
         mShowTasks = (Button) findViewById(R.id.show_tasks);
         mShowTasks.setOnClickListener(mShowTasksOnClickListener);
-        mTasksMessage = (TextView) findViewById(R.id.tasks_message);
+        //mTasksMessage = (TextView) findViewById(R.id.tasks_message);
         mDescriptionText = (TextView) findViewById(R.id.description);
         mPhoneNrButton.setOnClickListener(mPhoneNrOnClickListener);
         mEmailButton.setOnClickListener(mEmailOnClickListener);
         mGPSLocationButton.setOnClickListener(mLocationOnClickListener);
-        mAddToContacts = (Button) findViewById(R.id.addToContactsBtn);
-        mAddToContacts.setOnClickListener(mAddToContactsClickListener);
+        //mAddToContacts = (Button) findViewById(R.id.addToContactsBtn);
+        //mAddToContacts.setOnClickListener(mAddToContactsClickListener);
 
         ((Button) findViewById(R.id.editBtn))
                 .setOnClickListener(mEditOnClickListener);
@@ -246,7 +246,7 @@ public class MyOfferDetailActivity extends Activity implements Observer {
         if (tasks != null) {
             cnt = tasks.getCount();
         }
-        mTasksMessage.setText(String.valueOf(cnt + " tasks for this offer"));
+        //mTasksMessage.setText(String.valueOf(cnt + " tasks for this offer"));
         mShowTasks.setEnabled(cnt > 0);
     }
 

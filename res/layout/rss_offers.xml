@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:text="@string/no_offers"
             android:visibility="gone" />
-</FrameLayout>
-
+    </FrameLayout>
+
     <LinearLayout
         android:id="@+id/option_panel"
         android:layout_width="fill_parent"
@@ -33,6 +33,8 @@
 
         <Button
             android:id="@+id/reload"
+            style="@style/NormalButton"
+            android:layout_margin="@dimen/small_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/reload" />

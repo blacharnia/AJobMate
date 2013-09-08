@@ -25,20 +25,25 @@
 
     <LinearLayout
         android:id="@+id/optionPanel"
-        android:layout_width="wrap_content"
+        android:background="@color/option_panel_bg"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/hint" >
 
         <Button
             android:id="@+id/add"
+            style="@style/NormalButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/normal_margin"
             android:text="@string/add_new" />
 
         <Button
             android:id="@+id/archiveAll"
+            style="@style/NormalButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/normal_margin"
             android:text="@string/archive_all" />
     </LinearLayout>
 
@@ -46,7 +51,9 @@
         android:id="@+id/hint"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@color/option_panel_bg"
         android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/small_margin"
         android:text="@string/my_offers_hint" />
 
 </RelativeLayout>

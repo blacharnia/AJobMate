@@ -137,7 +137,7 @@ public class MyOffersListActivity extends Activity implements Observer {
 
     }
 
-    OnClickListener addClickListener = new OnClickListener() {
+    private OnClickListener addClickListener = new OnClickListener() {
 
         public void onClick(View v) {
             startActivityForResult(new Intent(MyOffersListActivity.this,
@@ -145,7 +145,7 @@ public class MyOffersListActivity extends Activity implements Observer {
         }
     };
 
-    OnClickListener archiveAllClickListener = new OnClickListener() {
+    private OnClickListener archiveAllClickListener = new OnClickListener() {
 
         public void onClick(View v) {
             if (mListAdapter.getCount() > 0) {

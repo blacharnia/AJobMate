@@ -78,10 +78,10 @@
     <string name="reload">Reload</string>
     <string name="my_tasks_hint">Press or long press list items and buttons for actions</string>
     <string name="related_offer">Related offer</string>
-    <string name="tasks_for_this_offer">tasks for this offer</string>
+    <string name="tasks_for_this_offer">tasks</string>
     <string name="show_tasks">Show tasks</string>
     <string name="import_task">Import</string>
-    <string name="my_offers_hint">Press or long press list items and buttons for actions</string>
+    <string name="my_offers_hint">You can also long press list items for actions</string>
     <string name="hint_my_archived_offers">Press or long press list items and option buttons for actions</string>
     <string name="hint_my_tasks_archived">Press or long press list items and option buttons for actions</string>
     <string name="edit_offer">Edit offer</string>

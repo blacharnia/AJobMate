@@ -7,14 +7,16 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/option_panel"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true" >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:padding="@dimen/small_margin" >
 
             <TextView
+                style="@style/TextLargeHeader"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/position" />
@@ -26,6 +28,7 @@
                 android:inputType="text" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/employer" />
@@ -37,6 +40,7 @@
                 android:inputType="text" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/description" />
@@ -54,6 +58,7 @@
                 android:orientation="vertical" >
 
                 <TextView
+                    style="@style/TextNormal"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/phone_number" />
@@ -62,9 +67,10 @@
                     android:id="@+id/phone_nr"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="phone" />
 
                 <TextView
+                    style="@style/TextNormal"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/email" />
@@ -76,6 +82,7 @@
                     android:inputType="textEmailAddress" />
 
                 <TextView
+                    style="@style/TextNormal"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/location" />
@@ -93,6 +100,7 @@
 
                     <TextView
                         android:id="@+id/gps_latitude_text"
+                        style="@style/TextNormal"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
@@ -109,6 +117,7 @@
 
                     <TextView
                         android:id="@+id/gps_longitude_text"
+                        style="@style/TextNormal"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/latitude"
@@ -125,10 +134,12 @@
 
                     <Button
                         android:id="@+id/gps_location"
+                        style="@style/NormalButton"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_margin="@dimen/small_margin"
                         android:text="@string/get_location" />
                 </RelativeLayout>
             </LinearLayout>
@@ -144,20 +155,26 @@
 
         <Button
             android:id="@+id/confirm"
+            style="@style/NormalButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_margin"
             android:text="@string/confirm" />
 
         <Button
             android:id="@+id/cancel"
+            style="@style/NormalButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_margin"
             android:text="@string/cancel" />
 
         <Button
             android:id="@+id/more_less_info"
+            style="@style/NormalButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_margin"
             android:text="@string/less_info" />
     </LinearLayout>
 

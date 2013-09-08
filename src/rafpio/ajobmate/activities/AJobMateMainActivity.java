@@ -1,6 +1,7 @@
 package rafpio.ajobmate.activities;
 
 import rafpio.ajobmate.R;
+import rafpio.ajobmate.adapters.MainOptionsGridAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +11,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.TextView;
 
 public class AJobMateMainActivity extends Activity {
 
-    private ListView mOptionsList;
+    private GridView mOptionsList;
     private String[] options;
 
     @Override
@@ -24,8 +25,8 @@ public class AJobMateMainActivity extends Activity {
 
 	setContentView(R.layout.main);
 	options = getResources().getStringArray(R.array.options);
-	mOptionsList = (ListView) findViewById(R.id.options_list);
-	mOptionsList.setAdapter(mListAdapter);
+	mOptionsList = (GridView) findViewById(R.id.gridView);
+	mOptionsList.setAdapter(new MainOptionsGridAdapter(this));
 	mOptionsList.setOnItemClickListener(mItemClickListener);
     }
 
